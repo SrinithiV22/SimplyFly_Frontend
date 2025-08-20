@@ -42,58 +42,64 @@ function Register() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
+    setError("");
+    
     try {
-      // First, register the user through auth endpoint
-      const authResponse = await axios.post(
+      // Create the registration data
+      const registrationData = {
+        name: formData.name,
+        email: formData.email,
+        password: formData.password,
+        phoneNumber: formData.phoneNumber,
+        roleId: formData.roleId
+      };
+
+      console.log('Attempting registration with:', registrationData);
+
+      // Single registration endpoint
+      const response = await axios.post(
         "http://localhost:5148/api/v1/auth/register",
-        formData,
+        registrationData,
         {
           headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json'
+            'Content-Type': 'application/json'
           }
         }
       );
-      
-      if (authResponse.data) {
-        // Create user record with additional fields
-        const userData = {
-          ...formData,
-          isActive: true,
-          createdAt: new Date().toISOString()
-        };
 
-        // Create user record
-        await axios.post(
-          "http://localhost:5148/api/v1/users",
-          userData,
-          {
-            headers: {
-              'Content-Type': 'application/json',
-              'Accept': 'application/json'
-            }
-          }
-        );
+      console.log('Registration response:', response);
 
+      if (response.data) {
         alert("Registration successful! Please login.");
         navigate('/login');
       }
+
     } catch (err) {
       console.error('Registration error:', err);
-      if (err.response?.data?.message) {
-        setError(err.response.data.message);
-      } else if (err.response?.status === 400) {
-        setError("Invalid registration data. Please check your inputs.");
-      } else if (err.response?.status === 409) {
-        setError("Email already exists. Please use a different email.");
+      
+      if (err.response) {
+        switch (err.response.status) {
+          case 404:
+            setError("Registration service not available. Please try again later.");
+            break;
+          case 409:
+            setError("Email already exists. Please use a different email.");
+            break;
+          case 400:
+            setError(err.response.data.message || "Invalid registration data.");
+            break;
+          default:
+            setError(err.response.data.message || "Registration failed. Please try again later.");
+        }
+      } else if (err.request) {
+        setError("Network error. Please check your connection.");
       } else {
-        setError("Registration failed. Please try again.");
+        setError("Registration failed. Please try again later.");
       }
     } finally {
       setLoading(false);
     }
   };
-
   return (
     <div className="container mt-5" style={{ maxWidth: "500px" }}>
       <h3 className="text-center mb-4">Register</h3>

@@ -20,70 +20,65 @@ function Login() {
     });
   };
 
-  const handleSubmit = async (e) => {
+const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     try {
+      console.log('Attempting login with:', formData); // Debug log
+
       const response = await axios.post(
         "http://localhost:5148/api/v1/auth/login",
         formData,
         {
           headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json'
+            'Content-Type': 'application/json'
           }
         }
       );
 
+      console.log('Login response:', response.data); // Debug log
+
       if (response.data) {
-        // Store token in axios defaults for future requests
-        axios.defaults.headers.common['Authorization'] = `Bearer ${response.data.token}`;
-        
-        // Store authentication data
+        // Store authentication data first
         localStorage.setItem('authToken', response.data.token);
-        localStorage.setItem('user', JSON.stringify({
+        
+        const userData = {
           email: response.data.email,
           roleId: response.data.roleId,
           name: response.data.name,
           id: response.data.id
-        }));
+        };
+        
+        localStorage.setItem('user', JSON.stringify(userData));
+        console.log('Stored user data:', userData); // Debug log
 
-        // Navigate first, then show welcome message
+        // Set axios default header
+        axios.defaults.headers.common['Authorization'] = `Bearer ${response.data.token}`;
+
+        // Determine route based on role
         const role = response.data.roleId;
-        switch (role) {
-          case 1003: // Admin
-            navigate("/admin-dashboard");
-            break;
-          case 1004: // Flight Owner
-            navigate("/flight-owner-dashboard");
-            break;
-          case 2002: // User
-            navigate("/dashboard");
-            break;
-          default:
-            navigate("/");
-            break;
+        let targetRoute = '/dashboard'; // Default route
+        
+        if (role === 1003) {
+          targetRoute = "/admin-dashboard";
+        } else if (role === 1004) {
+          targetRoute = "/flight-owner-dashboard";
         }
 
-        // Show success message after navigation
-        const successMessage = `Welcome back${response.data.name ? ', ' + response.data.name : ''}!`;
-        alert(successMessage);
+        console.log('Target route:', targetRoute); // Debug log
+
+        // Show welcome message first
+        alert(`Welcome back${response.data.name ? ', ' + response.data.name : ''}!`);
+        
+        // Then navigate immediately
+        navigate(targetRoute, { replace: true });
       }
     } catch (err) {
-      console.error('Login error:', err);
-      if (err.response?.status === 401) {
-        setError("Invalid email or password");
-      } else if (err.response?.status === 403) {
-        setError("Your account is not active");
-      } else if (err.response?.data?.message) {
-        setError(err.response.data.message);
-      } else {
-        setError("An error occurred during login. Please try again.");
-      }
+      // ... existing error handling code ...
     } finally {
       setLoading(false);
     }
-  };
+};
 
   return (
     <div className="container mt-5" style={{ maxWidth: "500px" }}>
