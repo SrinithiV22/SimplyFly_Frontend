@@ -24,7 +24,6 @@ const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     try {
-      console.log('Attempting login with:', formData); // Debug log
 
       const response = await axios.post(
         "http://localhost:5148/api/v1/auth/login",
@@ -36,27 +35,30 @@ const handleSubmit = async (e) => {
         }
       );
 
-      console.log('Login response:', response.data); // Debug log
 
-      if (response.data) {
-        // Store authentication data first
-        localStorage.setItem('authToken', response.data.token);
+      if (response.data && response.data.token) {
+        // console.log('Login successful - storing user data...');
         
+        // Store authentication token first
+        const token = response.data.token;
+        localStorage.setItem('authToken', token);
+        
+        // Set axios header for subsequent requests
+        axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+        
+        // Create user data with available info (no profile API available)
         const userData = {
-          email: response.data.email,
-          roleId: response.data.roleId,
-          name: response.data.name,
-          id: response.data.id
+          email: formData.email,
+          roleId: 1002, // Default customer role
+          name: formData.email.split('@')[0], // Use email prefix as name
+          id: Date.now() // Temporary ID
         };
         
+        // console.log('Storing user data:', userData);
         localStorage.setItem('user', JSON.stringify(userData));
-        console.log('Stored user data:', userData); // Debug log
-
-        // Set axios default header
-        axios.defaults.headers.common['Authorization'] = `Bearer ${response.data.token}`;
 
         // Determine route based on role
-        const role = response.data.roleId;
+        const role = userData.roleId;
         let targetRoute = '/dashboard'; // Default route
         
         if (role === 1003) {
@@ -65,16 +67,29 @@ const handleSubmit = async (e) => {
           targetRoute = "/flight-owner-dashboard";
         }
 
-        console.log('Target route:', targetRoute); // Debug log
 
-        // Show welcome message first
-        alert(`Welcome back${response.data.name ? ', ' + response.data.name : ''}!`);
+        // Show welcome message
+        alert(`Welcome back${userData.name ? ', ' + userData.name : ''}!`);
         
-        // Then navigate immediately
+        // Navigate to dashboard
         navigate(targetRoute, { replace: true });
       }
     } catch (err) {
-      // ... existing error handling code ...
+      console.error('Login error details:', err);
+      console.error('Error response:', err.response?.data);
+      console.error('Error status:', err.response?.status);
+      
+      if (err.response?.status === 401) {
+        setError("Invalid email or password. Please try again.");
+      } else if (err.response?.status === 404) {
+        setError("User not found. Please check your email or register first.");
+      } else if (err.response?.data?.message) {
+        setError(err.response.data.message);
+      } else if (err.message) {
+        setError(err.message);
+      } else {
+        setError("Login failed. Please try again later.");
+      }
     } finally {
       setLoading(false);
     }
