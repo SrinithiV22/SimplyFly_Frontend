@@ -1,7 +1,11 @@
 import axios from "axios";
-import { baseUrl } from "../environment.dev";
+
+const API_BASE_URL = 'http://localhost:5148/api/v1';
 
 export function loginAPICall(loginModel) {
-  // Adjust path/casing to match your backend exactly
-  return axios.post(baseUrl + "api/v1/auth/login", loginModel);
+  return axios.post(`${API_BASE_URL}/auth/login`, loginModel);
+}
+
+export function registerAPICall(registerModel) {
+  return axios.post(`${API_BASE_URL}/auth/register`, registerModel);
 }

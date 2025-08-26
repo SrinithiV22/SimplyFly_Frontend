@@ -46,13 +46,21 @@ const handleSubmit = async (e) => {
         // Set axios header for subsequent requests
         axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
         
-        // Create user data with available info (no profile API available)
+        // Get temporary registration data if available
+        const tempRegData = localStorage.getItem('tempRegistrationData');
+        const registrationData = tempRegData ? JSON.parse(tempRegData) : {};
+        
+        // Create user data with available info from response and registration
         const userData = {
           email: formData.email,
-          roleId: 1002, // Default customer role
-          name: formData.email.split('@')[0], // Use email prefix as name
-          id: Date.now() // Temporary ID
+          roleId: response.data.roleId || response.data.user?.roleId || registrationData.roleId || 2002,
+          name: response.data.name || response.data.user?.name || registrationData.name || formData.email.split('@')[0],
+          phoneNumber: response.data.phoneNumber || response.data.user?.phoneNumber || registrationData.phoneNumber || '',
+          id: response.data.id || response.data.user?.id || Date.now()
         };
+        
+        // Clean up temporary registration data
+        localStorage.removeItem('tempRegistrationData');
         
         // console.log('Storing user data:', userData);
         localStorage.setItem('user', JSON.stringify(userData));

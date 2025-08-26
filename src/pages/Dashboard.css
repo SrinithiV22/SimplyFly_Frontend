@@ -1,6 +1,6 @@
 /* ====== Option A: Modern Airline Look ====== */
 .navbar {
-  background-color: #004080 !important; /* Deep Blue */
+  background-color: #0056A6 !important; /* Primary Deep Blue */
   padding: 1rem;
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
@@ -12,23 +12,25 @@
 }
 
 .btn-logout {
-  background-color: #FF6F00!important; /* Bright Orange */
-  color: white !important;
+  background-color: #FFC107!important; /* Accent Amber */
+  color: #212529 !important;
   border: none;
+  font-weight: 600;
 }
 .btn-logout:hover {
-  background-color: #e6480a  !important;
+  background-color: #ffb300  !important;
+  color: #212529 !important;
 }
 
 
 .dashboard-container {
   padding: 2rem;
   width: 100%;
-  background-color: #f8f9fa;
+  background-color: #F5F7FA;
 }
 
 .main-content {
-  background-color: #f8f9fa;
+  background-color: #F5F7FA;
 }
 
 .stat-card {
@@ -64,7 +66,7 @@
 }
 
 .welcome-section {
-  background: linear-gradient(135deg, #004080 0%, #00AEEF 100%);
+  background: linear-gradient(135deg, #0056A6 0%, #00AEEF 100%);
   color: white;
   border: none;
 }
@@ -87,7 +89,7 @@
 }
 
 .card-title {
-  color: #004080;
+  color: #212529;
   font-weight: 600;
 }
 
@@ -118,14 +120,15 @@
 
 /* ====== Flight Search Widget Styles ====== */
 .flight-search-form {
-  background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+  background: linear-gradient(135deg, #ffffff 0%, #F5F7FA 100%);
   border-radius: 12px;
   padding: 1.5rem;
-  border: 1px solid rgba(0, 64, 128, 0.1);
+  border: 2px solid rgba(0, 86, 166, 0.15);
+  box-shadow: 0 4px 12px rgba(0, 86, 166, 0.1);
 }
 
 .flight-search-form .form-label {
-  color: #004080;
+  color: #212529;
   font-weight: 600;
   font-size: 0.9rem;
   margin-bottom: 0.5rem;
@@ -142,8 +145,8 @@
 
 .flight-search-form .form-control:focus,
 .flight-search-form .form-select:focus {
-  border-color: #004080;
-  box-shadow: 0 0 0 0.2rem rgba(0, 64, 128, 0.15);
+  border-color: #0056A6;
+  box-shadow: 0 0 0 0.2rem rgba(0, 86, 166, 0.15);
 }
 
 .flight-search-form .form-control::placeholder {
@@ -152,7 +155,7 @@
 }
 
 .search-btn {
-  background: linear-gradient(135deg, #004080 0%, #00AEEF 100%) !important;
+  background: #FFC107 !important;
   border: none !important;
   border-radius: 10px !important;
   padding: 14px 28px !important;
@@ -160,12 +163,15 @@
   text-transform: uppercase !important;
   letter-spacing: 1px !important;
   transition: all 0.3s ease !important;
-  box-shadow: 0 4px 15px rgba(0, 64, 128, 0.3) !important;
+  box-shadow: 0 4px 15px rgba(255, 193, 7, 0.3) !important;
+  color: #212529 !important;
 }
 
 .search-btn:hover {
+  background: #FFD54F !important;
   transform: translateY(-2px) !important;
-  box-shadow: 0 6px 20px rgba(0, 64, 128, 0.4) !important;
+  box-shadow: 0 6px 20px rgba(255, 213, 79, 0.4) !important;
+  color: #212529 !important;
 }
 
 .search-btn:active {
@@ -186,7 +192,7 @@
   left: 0.75rem;
   top: 50%;
   transform: translateY(-50%);
-  color: #004080;
+  color: #0056A6;
   z-index: 10;
 }
 
@@ -194,21 +200,21 @@
 
 /* Trip Cards */
 .trip-card {
-  background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
-  border: 1px solid rgba(0, 64, 128, 0.1) !important;
+  background: linear-gradient(135deg, #F5F7FA 0%, #ffffff 100%);
+  border: 1px solid rgba(0, 86, 166, 0.1) !important;
   transition: all 0.3s ease;
 }
 
 .trip-card:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 15px rgba(0, 64, 128, 0.15);
+  box-shadow: 0 4px 15px rgba(0, 174, 239, 0.15);
 }
 
 /* Profile Section */
 .profile-avatar {
   width: 60px;
   height: 60px;
-  background: linear-gradient(135deg, #004080 0%, #00AEEF 100%);
+  background: linear-gradient(135deg, #0056A6 0%, #00AEEF 100%);
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -220,7 +226,7 @@
 }
 
 .profile-stats .stat-item h6 {
-  color: #004080;
+  color: #212529;
   font-weight: 700;
 }
 
@@ -231,14 +237,15 @@
 }
 
 .notification-item:hover {
-  border-left-color: #004080;
-  background-color: rgba(0, 64, 128, 0.05) !important;
+  border-left-color: #00AEEF;
+  background-color: rgba(0, 174, 239, 0.05) !important;
 }
 
 .notification-dot {
   width: 8px;
   height: 8px;
   margin-top: 6px;
+  background: #FFC107 !important;
 }
 
 /* Payment Items */
@@ -248,7 +255,7 @@
 }
 
 .payment-item:hover {
-  border-left-color: #004080;
+  border-left-color: #00AEEF;
   transform: translateX(2px);
 }
 
@@ -268,30 +275,33 @@
   left: 0;
   right: 0;
   height: 3px;
-  background: linear-gradient(135deg, #004080 0%, #00AEEF 100%);
+  background: linear-gradient(135deg, #0056A6 0%, #00AEEF 100%);
 }
 
 .offer-card:hover {
-  border-color: rgba(0, 64, 128, 0.2) !important;
+  border-color: rgba(0, 86, 166, 0.2) !important;
   transform: translateY(-2px);
-  box-shadow: 0 4px 15px rgba(0, 64, 128, 0.15);
+  box-shadow: 0 4px 15px rgba(0, 86, 166, 0.15);
 }
 
 .offer-card code {
   font-family: 'Courier New', monospace;
   font-weight: bold;
   font-size: 0.8rem;
+  background: #FFC107 !important;
+  color: #212529 !important;
+  border: none;
 }
 
 /* Table Enhancements */
 .table-hover tbody tr:hover {
-  background-color: rgba(0, 64, 128, 0.05);
+  background-color: rgba(0, 174, 239, 0.05);
 }
 
 .table th {
-  color: #004080;
+  color: #212529;
   font-weight: 600;
-  border-bottom: 2px solid rgba(0, 64, 128, 0.1);
+  border-bottom: 2px solid rgba(0, 86, 166, 0.1);
 }
 
 /* Badge Enhancements */
@@ -325,9 +335,10 @@
 
 /* Status Colors */
 .text-success { color: #28a745 !important; }
-.text-warning { color: #ffc107 !important; }
+.text-warning { color: #FFC107 !important; }
 .text-danger { color: #dc3545 !important; }
-.text-info { color: #17a2b8 !important; }
+.text-info { color: #00AEEF !important; }
+.text-primary { color: #0056A6 !important; }
 
 /* Animation for new notifications */
 @keyframes pulse {

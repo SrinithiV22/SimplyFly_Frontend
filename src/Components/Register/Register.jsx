@@ -70,6 +70,15 @@ function Register() {
       console.log('Registration response:', response);
 
       if (response.data) {
+        // Store registration data temporarily for login to access
+        const tempUserData = {
+          name: formData.name,
+          email: formData.email,
+          phoneNumber: formData.phoneNumber,
+          roleId: formData.roleId
+        };
+        localStorage.setItem('tempRegistrationData', JSON.stringify(tempUserData));
+        
         alert("Registration successful! Please login.");
         navigate('/login');
       }

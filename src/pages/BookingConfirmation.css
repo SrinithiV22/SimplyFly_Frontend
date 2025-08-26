@@ -1,0 +1,275 @@
+.booking-confirmation-container {
+  min-height: 100vh;
+  background: #F5F7FA;
+}
+
+.booking-header h2 {
+  color: #212529;
+  font-weight: 600;
+}
+
+/* Progress Steps */
+.booking-steps {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 30px 0;
+}
+
+.step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  flex: 1;
+  max-width: 200px;
+}
+
+.step:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  top: 20px;
+  left: 60%;
+  width: 80%;
+  height: 2px;
+  background: #dee2e6;
+  z-index: 0;
+}
+
+.step.active:not(:last-child)::after {
+  background: #0056A6;
+}
+
+.step-number {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #dee2e6;
+  color: #6c757d;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  margin-bottom: 8px;
+  position: relative;
+  z-index: 1;
+  transition: all 0.3s ease;
+}
+
+.step.active .step-number {
+  background: #0056A6;
+  color: white;
+}
+
+.step-label {
+  font-size: 14px;
+  color: #6c757d;
+  text-align: center;
+  font-weight: 500;
+}
+
+.step.active .step-label {
+  color: #0056A6;
+}
+
+/* Passenger Form */
+.passenger-form {
+  background: #F5F7FA;
+  transition: all 0.3s ease;
+}
+
+.passenger-form:hover {
+  background: #e9ecef;
+}
+
+.passenger-form h6 {
+  color: #212529;
+  font-weight: 600;
+  border-bottom: 2px solid #00AEEF;
+  padding-bottom: 8px;
+  margin-bottom: 15px;
+}
+
+/* Contact Form */
+.contact-form {
+  background: #fff;
+  border: 1px solid #dee2e6;
+  border-radius: 8px;
+  padding: 20px;
+}
+
+/* Payment Methods */
+.payment-methods .form-check {
+  padding: 15px;
+  border: 1px solid #dee2e6;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.payment-methods .form-check:hover {
+  background: #F5F7FA;
+}
+
+.payment-methods .form-check-input:checked + .form-check-label {
+  color: #0056A6;
+  font-weight: 600;
+}
+
+.card-details {
+  background: #F5F7FA;
+  padding: 20px;
+  border-radius: 8px;
+  margin-top: 20px;
+}
+
+/* Flight Summary */
+.flight-summary {
+  position: sticky;
+  top: 20px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.flight-summary .card-title {
+  color: #212529;
+  font-weight: 600;
+  border-bottom: 2px solid #00AEEF;
+  padding-bottom: 10px;
+}
+
+.flight-info {
+  background: #F5F7FA;
+  padding: 15px;
+  border-radius: 8px;
+}
+
+.route-info {
+  background: white;
+  padding: 15px;
+  border-radius: 8px;
+  border: 1px solid #dee2e6;
+}
+
+.flight-details {
+  font-size: 14px;
+  color: #6c757d;
+}
+
+.price-breakdown {
+  font-size: 14px;
+}
+
+.price-breakdown .fw-bold {
+  color: #212529;
+  font-size: 18px;
+}
+
+/* Success State */
+.success-icon {
+  background: #d4edda;
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+}
+
+.booking-id {
+  background: #e8f4fd;
+  padding: 15px;
+  border-radius: 8px;
+  border-left: 4px solid #0056A6;
+  font-size: 18px;
+}
+
+/* Form Validation */
+.form-control:invalid {
+  border-color: #dc3545;
+}
+
+.form-control:valid {
+  border-color: #28a745;
+}
+
+.form-select:invalid {
+  border-color: #dc3545;
+}
+
+.form-select:valid {
+  border-color: #28a745;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .booking-steps {
+    flex-direction: column;
+    gap: 20px;
+  }
+  
+  .step:not(:last-child)::after {
+    display: none;
+  }
+  
+  .passenger-form {
+    margin-bottom: 20px;
+  }
+  
+  .flight-summary {
+    position: static;
+    margin-top: 20px;
+  }
+  
+  .route-info .d-flex {
+    flex-direction: column;
+    text-align: center;
+    gap: 10px;
+  }
+}
+
+/* Loading States */
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.spinner-border-sm {
+  width: 1rem;
+  height: 1rem;
+}
+
+/* Card Hover Effects */
+.card {
+  transition: all 0.3s ease;
+  border: none;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.card:hover {
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+  transform: translateY(-2px);
+}
+
+/* Button Styles */
+.btn-primary {
+  background: linear-gradient(45deg, #0056A6, #00AEEF);
+  border: none;
+  font-weight: 600;
+  padding: 12px 24px;
+  transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 86, 166, 0.3);
+}
+
+.btn-outline-secondary {
+  border-width: 2px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.btn-outline-secondary:hover {
+  transform: translateY(-1px);
+}

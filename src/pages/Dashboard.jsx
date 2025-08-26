@@ -12,6 +12,10 @@ import {
   faPlane,
   faBell
 } from '@fortawesome/free-solid-svg-icons';
+import BookFlight from './BookFlight';
+import MyBookings from './MyBookings';
+import Payments from './Payments';
+import Profile from './Profile';
 import './Dashboard.css';
 
 export default function Dashboard() {
@@ -60,7 +64,8 @@ export default function Dashboard() {
     from: '',
     to: '',
     departureDate: '',
-    passengers: 1
+    passengers: 1,
+    tripType: 'one-way'
   });
 
   // User-specific data states
@@ -320,6 +325,14 @@ export default function Dashboard() {
 
   const renderContent = () => {
     switch(activeTab) {
+      case 'bookFlight':
+        return <BookFlight />;
+      case 'myBookings':
+        return <MyBookings />;
+      case 'payments':
+        return <Payments />;
+      case 'profile':
+        return <Profile />;
       case 'dashboard':
         return (
           <>
