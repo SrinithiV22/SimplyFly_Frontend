@@ -13,6 +13,7 @@ import Signup from "./pages/Signup";
 import ProtectedRoute from "./components/ProtectedRoute";
 import RoleProtectedRoute from "./components/RoleProtectedRoute";
 import AuthRoute from "./components/AuthRoute";
+import { PaymentGuard, BookingConfirmationGuard, PassengerDetailsGuard } from "./components/RouteGuard";
 
 function App() {
   return (
@@ -22,9 +23,9 @@ function App() {
         <Route path="/home" element={<ProtectedRoute><Home /></ProtectedRoute>} />
         <Route path="/flights" element={<ProtectedRoute><Flights /></ProtectedRoute>} />
         <Route path="/bookings" element={<ProtectedRoute><Bookings /></ProtectedRoute>} /> {/* Seat selection */}
-        <Route path="/passenger-details" element={<ProtectedRoute><PassengerDetails /></ProtectedRoute>} /> {/* Passenger details */}
-        <Route path="/payment" element={<ProtectedRoute><Payment /></ProtectedRoute>} /> {/* Payment page */}
-        <Route path="/booking-confirmation" element={<ProtectedRoute><BookingConfirmation /></ProtectedRoute>} /> {/* Booking confirmation */}
+        <Route path="/passenger-details" element={<ProtectedRoute><PassengerDetailsGuard><PassengerDetails /></PassengerDetailsGuard></ProtectedRoute>} /> {/* Passenger details */}
+        <Route path="/payment" element={<ProtectedRoute><PaymentGuard><Payment /></PaymentGuard></ProtectedRoute>} /> {/* Payment page */}
+        <Route path="/booking-confirmation" element={<ProtectedRoute><BookingConfirmationGuard><BookingConfirmation /></BookingConfirmationGuard></ProtectedRoute>} /> {/* Booking confirmation */}
         <Route path="/booking-history" element={<ProtectedRoute><BookingHistory /></ProtectedRoute>} /> {/* Booking history */}
         <Route path="/my-bookings" element={<ProtectedRoute><BookingHistory /></ProtectedRoute>} /> {/* Alias for booking history */}
         <Route path="/admin" element={<RoleProtectedRoute allowedRoles={['Admin']}><Admin /></RoleProtectedRoute>} />

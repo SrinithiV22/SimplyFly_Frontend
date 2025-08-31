@@ -186,6 +186,16 @@ function Flights() {
           const airlineInfo = getAirlineInfo(flight.airline, route);
           const flightNumber = generateFlightNumber(airlineInfo.code, route);
           
+          // Calculate price based on travel class
+          const basePriceMultiplier = {
+            'Economy': 1.0,
+            'Premium Economy': 1.4,
+            'Business': 2.2,
+            'First Class': 3.5
+          };
+          const multiplier = basePriceMultiplier[travelClass] || 1.0;
+          const adjustedPrice = Math.round(parseFloat(flight.price || 0) * multiplier);
+          
           // Generate departure time if not present (use search date or default to today)
           let departureTime = flight.departureTime;
           if (!departureTime) {
@@ -227,7 +237,8 @@ function Flights() {
             flightNumber: flight.flightNumber || flightNumber,
             departureTime: departureTime,
             arrivalTime: arrivalTime,
-            stops: flight.stops !== undefined ? flight.stops : (hasStops ? 1 : 0)
+            stops: flight.stops !== undefined ? flight.stops : (hasStops ? 1 : 0),
+            price: adjustedPrice // Use the class-adjusted price
           };
         });
         
@@ -645,7 +656,8 @@ const sortedAndFilteredFlights = flights
                         const flightDataForBooking = {
                           ...flight,
                           duration: calculateDuration(flight.departureTime, flight.arrivalTime),
-                          searchedDepartureDate: departureDate // Add the original search date
+                          searchedDepartureDate: departureDate, // Add the original search date
+                          travelClass: travelClass // Add the selected travel class
                         };
                         localStorage.setItem('selectedFlightData', JSON.stringify(flightDataForBooking));
                         

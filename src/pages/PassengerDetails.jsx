@@ -170,8 +170,11 @@ function PassengerDetails() {
       localStorage.setItem('completeBookingInfo', JSON.stringify(completeBookingInfo));
       localStorage.removeItem('pendingBookingInfo');
       
+      // Set authorization flag for payment page access
+      sessionStorage.setItem('fromPassengerDetails', 'true');
+      
       // Navigate to payment page
-      navigate('/payment');
+      navigate('/payment', { replace: true });
       
     } catch (error) {
       console.error('Error completing booking:', error);

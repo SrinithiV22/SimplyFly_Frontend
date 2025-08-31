@@ -161,7 +161,8 @@ function Bookings() {
             departureTime: parsedFlightData.departureTime || '00:00',
             arrivalTime: parsedFlightData.arrivalTime || '00:00',
             duration: parsedFlightData.duration || '0h 0m',
-            price: price || parsedFlightData.price || '0'
+            price: price || parsedFlightData.price || '0',
+            travelClass: parsedFlightData.travelClass || 'Economy'
           });
           
           // Don't clear the data immediately - keep it until booking is confirmed
@@ -274,7 +275,7 @@ function Bookings() {
         selectedSeats: selectedSeats.join(', '), // Convert array to comma-separated string
         passengers: passengers,
         totalAmount: parseFloat(price) * passengers,
-        ticketType: 'Economy', // Default to Economy
+        ticketType: flightData.travelClass || 'Economy', // Use selected travel class
         departureTime: departureTime.toISOString(),
         arrivalTime: arrivalTime.toISOString(),
         origin: flightData.origin,
@@ -284,6 +285,9 @@ function Bookings() {
       
       // Store booking info in localStorage for passenger details page
       localStorage.setItem('pendingBookingInfo', JSON.stringify(bookingInfo));
+      
+      // Set authorization flag for passenger details page
+      sessionStorage.setItem('fromBookings', 'true');
       
       // Navigate to passenger details page with selected seats
       const passengerParams = new URLSearchParams({
@@ -531,6 +535,10 @@ function Bookings() {
               <div className="summary-row">
                 <span>Passengers:</span>
                 <span>{passengers}</span>
+              </div>
+              <div className="summary-row">
+                <span>Travel Class:</span>
+                <span>{flightData?.travelClass || 'Economy'}</span>
               </div>
               <div className="summary-row total">
                 <span>Total Amount:</span>

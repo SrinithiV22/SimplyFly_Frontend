@@ -18,7 +18,7 @@ function Home() {
     children: 0,
     infants: 0
   });
-  const [travelClass, setTravelClass] = useState('Business');
+  const [travelClass, setTravelClass] = useState('Economy');
   const [showPassengerDropdown, setShowPassengerDropdown] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
   const [isFlightOwner, setIsFlightOwner] = useState(false);

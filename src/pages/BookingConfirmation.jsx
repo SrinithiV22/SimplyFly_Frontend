@@ -8,6 +8,12 @@ function BookingConfirmation() {
   const [bookingData, setBookingData] = useState(null);
   const [loading, setLoading] = useState(true);
 
+  const handleLogout = () => {
+    localStorage.clear();
+    sessionStorage.clear();
+    navigate('/login', { replace: true });
+  };
+
   useEffect(() => {
     // Get booking data from location state or localStorage
     let bookingInfo = null;
@@ -22,15 +28,35 @@ function BookingConfirmation() {
       }
     }
 
-    if (bookingInfo) {
-      setBookingData(bookingInfo);
-    } else {
+    if (!bookingInfo) {
       // No booking data found, redirect to home
       navigate('/home');
       return;
     }
     
+    setBookingData(bookingInfo);
     setLoading(false);
+    
+    // Prevent navigation back to payment page only
+    let isFromPayment = true;
+    
+    const handlePopState = (event) => {
+      if (isFromPayment) {
+        // Block going back to payment page
+        event.preventDefault();
+        window.history.pushState(null, '', window.location.href);
+        // After first back attempt, allow normal navigation
+        isFromPayment = false;
+      }
+    };
+    
+    // Add history entry to catch back navigation
+    window.history.pushState(null, '', window.location.href);
+    window.addEventListener('popstate', handlePopState);
+    
+    return () => {
+      window.removeEventListener('popstate', handlePopState);
+    };
   }, [location.state, navigate]);
 
   const generateTicketNumber = () => {
@@ -150,6 +176,12 @@ function BookingConfirmation() {
 
   return (
     <div className="booking-confirmation-container">
+      <nav className="nav-menu">
+        <button onClick={() => navigate('/home')} className="nav-link">Home</button>
+        <button onClick={() => navigate('/flights')} className="nav-link">Flights</button>
+        <button onClick={() => navigate('/booking-history')} className="nav-link">My Bookings</button>
+        <button onClick={handleLogout} className="nav-link logout">Logout</button>
+      </nav>
       <div className="confirmation-content">
         <div className="success-header">
           <div className="success-icon">✅</div>
@@ -253,11 +285,11 @@ function BookingConfirmation() {
             📄 Download Ticket (PDF)
           </button>
           <button onClick={() => navigate('/booking-history')} className="btn-secondary">
-            View All Bookings
-          </button>
-          <button onClick={() => navigate('/home')} className="btn-secondary">
-            Book Another Flight
-          </button>
+          View All Bookings
+        </button>
+        <button onClick={() => navigate('/home')} className="btn-secondary">
+          Book Another Flight
+        </button>
         </div>
 
         <div className="important-info">

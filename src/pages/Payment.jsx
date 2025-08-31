@@ -96,18 +96,10 @@ function Payment() {
       }
     };
 
-    const handlePopState = () => {
-      if (!paymentCompleted) {
-        handlePaymentAbandonment();
-      }
-    };
-
     window.addEventListener('beforeunload', handleBeforeUnload);
-    window.addEventListener('popstate', handlePopState);
 
     return () => {
       window.removeEventListener('beforeunload', handleBeforeUnload);
-      window.removeEventListener('popstate', handlePopState);
     };
   }, [navigate, paymentCompleted]);
 
@@ -199,6 +191,10 @@ function Payment() {
       // For demo purposes, we'll assume payment is successful
       console.log('Payment processed successfully');
 
+      // Clear payment authorization and set booking confirmation authorization
+      sessionStorage.removeItem('fromPassengerDetails');
+      sessionStorage.setItem('fromPayment', 'true');
+      
       // Navigate to booking confirmation with payment success
       navigate('/booking-confirmation', {
         state: {
