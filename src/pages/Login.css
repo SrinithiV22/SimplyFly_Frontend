@@ -1,0 +1,433 @@
+body, html {
+  margin: 0;
+  padding: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.login-page {
+  min-height: 100vh;
+  display: flex;
+  background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+.login-page::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: 
+    url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800"><defs><style>.cls-1{fill:%23ffffff;opacity:0.1;}</style></defs><g><path class="cls-1" d="M200,400 L300,380 L350,390 L400,385 L450,395 L500,390 L600,400 L650,395 L700,405 L800,400 L900,410 L1000,405 L1100,415" stroke="%23ffffff" stroke-width="2" fill="none"/><circle class="cls-1" cx="250" cy="350" r="3"/><circle class="cls-1" cx="450" cy="320" r="2"/><circle class="cls-1" cx="650" cy="380" r="2.5"/><circle class="cls-1" cx="850" cy="360" r="2"/><path class="cls-1" d="M100,200 L150,180 Q200,170 250,185 L300,190 Q350,195 400,180 L450,175" stroke="%23ffffff" stroke-width="1.5" fill="none"/><path class="cls-1" d="M600,150 L650,135 Q700,125 750,140 L800,145 Q850,150 900,135 L950,130" stroke="%23ffffff" stroke-width="1.5" fill="none"/></g></svg>'),
+    url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600"><defs><style>.airplane{fill:%23ffffff;opacity:0.08;}</style></defs><g transform="translate(400,300)"><path class="airplane" d="M-50,-10 L-30,-5 L0,0 L30,-5 L50,-10 L30,-5 L50,0 L30,5 L0,10 L-30,5 L-50,10 L-30,5 Z"/><circle class="airplane" cx="0" cy="0" r="2"/></g><g transform="translate(150,150) rotate(45)"><path class="airplane" d="M-25,-5 L-15,-2.5 L0,0 L15,-2.5 L25,-5 L15,-2.5 L25,0 L15,2.5 L0,5 L-15,2.5 L-25,5 L-15,2.5 Z"/></g><g transform="translate(650,450) rotate(-30)"><path class="airplane" d="M-25,-5 L-15,-2.5 L0,0 L15,-2.5 L25,-5 L15,-2.5 L25,0 L15,2.5 L0,5 L-15,2.5 L-25,5 L-15,2.5 Z"/></g></svg>');
+  background-size: cover, 100% 100%;
+  background-position: center, center;
+  background-repeat: no-repeat;
+}
+
+.login-page::after {
+  content: '';
+  position: absolute;
+  top: 10%;
+  left: 10%;
+  width: 80px;
+  height: 80px;
+  background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><style>.plane{fill:%23ffffff;opacity:0.15;}</style></defs><g transform="translate(50,50)"><path class="plane" d="M-40,-8 L-20,-4 L0,0 L20,-4 L40,-8 L30,-4 L45,0 L30,4 L20,8 L0,12 L-20,8 L-40,12 L-30,4 L-45,0 L-30,-4 Z"/><path class="plane" d="M-10,-15 L0,-20 L10,-15 L0,-10 Z"/><path class="plane" d="M-15,15 L0,20 L15,15 L0,10 Z"/><circle class="plane" cx="0" cy="0" r="3"/></g></svg>') no-repeat center;
+  background-size: contain;
+  animation: float 6s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  50% { transform: translateY(-20px) rotate(5deg); }
+}
+
+/* Add more floating airplanes */
+.login-page .floating-plane-1 {
+  position: absolute;
+  top: 20%;
+  right: 15%;
+  width: 60px;
+  height: 60px;
+  background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><style>.plane{fill:%23ffffff;opacity:0.12;}</style></defs><g transform="translate(50,50) rotate(15)"><path class="plane" d="M-30,-6 L-15,-3 L0,0 L15,-3 L30,-6 L22,-3 L35,0 L22,3 L15,6 L0,9 L-15,6 L-30,9 L-22,3 L-35,0 L-22,-3 Z"/></g></svg>') no-repeat center;
+  background-size: contain;
+  animation: float 8s ease-in-out infinite reverse;
+}
+
+.login-page .floating-plane-2 {
+  position: absolute;
+  bottom: 25%;
+  left: 8%;
+  width: 70px;
+  height: 70px;
+  background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><style>.plane{fill:%23ffffff;opacity:0.1;}</style></defs><g transform="translate(50,50) rotate(-10)"><path class="plane" d="M-35,-7 L-18,-3.5 L0,0 L18,-3.5 L35,-7 L26,-3.5 L40,0 L26,3.5 L18,7 L0,10.5 L-18,7 L-35,10.5 L-26,3.5 L-40,0 L-26,-3.5 Z"/></g></svg>') no-repeat center;
+  background-size: contain;
+  animation: float 10s ease-in-out infinite;
+}
+
+.login-page .floating-plane-3 {
+  position: absolute;
+  top: 60%;
+  right: 8%;
+  width: 50px;
+  height: 50px;
+  background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><style>.plane{fill:%23ffffff;opacity:0.08;}</style></defs><g transform="translate(50,50) rotate(25)"><path class="plane" d="M-25,-5 L-12,-2.5 L0,0 L12,-2.5 L25,-5 L18,-2.5 L30,0 L18,2.5 L12,5 L0,7.5 L-12,5 L-25,7.5 L-18,2.5 L-30,0 L-18,-2.5 Z"/></g></svg>') no-repeat center;
+  background-size: contain;
+  animation: float 7s ease-in-out infinite reverse;
+}
+
+.login-container {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  border-radius: 16px;
+  box-shadow: 0 24px 48px rgba(0, 0, 0, 0.15);
+  padding: 48px;
+  width: 100%;
+  max-width: 480px;
+  margin: auto;
+  position: relative;
+  z-index: 2;
+  margin-top: 5vh;
+  margin-bottom: 5vh;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.login-header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.login-header h2 {
+  color: #1a1a1a;
+  font-size: 32px;
+  font-weight: 700;
+  margin-bottom: 12px;
+  letter-spacing: -0.5px;
+}
+
+.login-header p {
+  color: #666;
+  font-size: 16px;
+  margin: 0;
+  font-weight: 400;
+}
+
+.login-form {
+  margin-bottom: 32px;
+}
+
+.input-group {
+  margin-bottom: 24px;
+  position: relative;
+}
+
+.input-group label {
+  display: block;
+  margin-bottom: 8px;
+  color: #1a1a1a;
+  font-weight: 600;
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.input-group input {
+  width: 100%;
+  padding: 16px 20px;
+  border: 2px solid #e8eaed;
+  border-radius: 12px;
+  font-size: 16px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-sizing: border-box;
+  background: #fafbfc;
+  font-weight: 500;
+}
+
+.input-group input:focus {
+  outline: none;
+  border-color: #ff6b35;
+  background: white;
+  box-shadow: 0 0 0 4px rgba(255, 107, 53, 0.1);
+  transform: translateY(-1px);
+}
+
+.input-group input::placeholder {
+  color: #9aa0a6;
+  font-weight: 400;
+}
+
+.login-button {
+  width: 100%;
+  padding: 18px;
+  background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  margin-top: 16px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  position: relative;
+  overflow: hidden;
+}
+
+.login-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s;
+}
+
+.login-button:hover::before {
+  left: 100%;
+}
+
+.login-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 32px rgba(255, 107, 53, 0.4);
+}
+
+.login-button:active {
+  transform: translateY(0);
+}
+
+.error-message {
+  background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+  color: #dc2626;
+  padding: 16px 20px;
+  border-radius: 12px;
+  margin-bottom: 24px;
+  border: 1px solid #fca5a5;
+  font-size: 14px;
+  text-align: center;
+  font-weight: 500;
+  position: relative;
+}
+
+.error-message::before {
+  content: '⚠️';
+  margin-right: 8px;
+}
+
+/* Add this after the error-message styles */
+
+.success-message {
+  background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+  color: #065f46;
+  padding: 16px 20px;
+  border-radius: 12px;
+  margin-bottom: 24px;
+  border: 1px solid #6ee7b7;
+  font-size: 14px;
+  text-align: center;
+  font-weight: 500;
+  position: relative;
+}
+
+.success-message::before {
+  content: '✅';
+  margin-right: 8px;
+}
+
+.login-footer {
+  text-align: center;
+  margin-top: 32px;
+  padding-top: 32px;
+  border-top: 1px solid #e8eaed;
+}
+
+.login-footer p {
+  color: #5f6368;
+  font-size: 14px;
+  margin: 0;
+  font-weight: 500;
+}
+
+.signup-link {
+  color: #ff6b35;
+  text-decoration: none;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.signup-link:hover {
+  color: #f7931e;
+  text-decoration: underline;
+}
+
+/* Additional decorative elements */
+.login-container::before {
+  content: '✈️';
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  font-size: 24px;
+  opacity: 0.3;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .login-page {
+    padding: 20px;
+  }
+  
+  .login-container {
+    padding: 32px 24px;
+    margin-top: 2vh;
+    margin-bottom: 2vh;
+    border-radius: 12px;
+  }
+  
+  .login-header h2 {
+    font-size: 28px;
+  }
+  
+  .input-group input {
+    padding: 14px 16px;
+  }
+  
+  .login-button {
+    padding: 16px;
+  }
+  
+  .floating-plane-1, 
+  .floating-plane-2, 
+  .floating-plane-3 {
+    display: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .login-container {
+    padding: 24px 20px;
+    margin: 1vh 10px;
+  }
+  
+  .login-header h2 {
+    font-size: 24px;
+  }
+  
+  .login-header p {
+    font-size: 14px;
+  }
+}
+
+/* Loading animation for button */
+.login-button.loading {
+  pointer-events: none;
+  opacity: 0.8;
+}
+
+.login-button.loading::after {
+  content: '';
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  margin: auto;
+  border: 2px solid transparent;
+  border-top-color: #ffffff;
+  border-radius: 50%;
+  animation: button-loading-spinner 1s ease infinite;
+}
+
+@keyframes button-loading-spinner {
+  from {
+    transform: rotate(0turn);
+  }
+  to {
+    transform: rotate(1turn);
+  }
+}
+
+/* Add these styles after your existing styles */
+
+/* Signup specific container - wider than login */
+.signup-container {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  border-radius: 16px;
+  box-shadow: 0 24px 48px rgba(0, 0, 0, 0.15);
+  padding: 40px;
+  width: 100%;
+  max-width: 600px; /* Wider than login container */
+  margin: auto;
+  position: relative;
+  z-index: 2;
+  margin-top: 3vh;
+  margin-bottom: 3vh;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* Signup form styling */
+.signup-form {
+  margin-bottom: 24px;
+}
+
+/* Form row for two-column layout */
+.form-row {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+/* Half width input groups */
+.input-group.half-width {
+  flex: 1;
+  margin-bottom: 0;
+}
+
+/* Responsive design for signup form */
+@media (max-width: 768px) {
+  .signup-container {
+    max-width: 480px;
+    padding: 32px 24px;
+    margin-top: 2vh;
+    margin-bottom: 2vh;
+  }
+  
+  .form-row {
+    flex-direction: column;
+    gap: 0;
+  }
+  
+  .input-group.half-width {
+    margin-bottom: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .signup-container {
+    padding: 24px 20px;
+    margin: 1vh 10px;
+  }
+  
+  .form-row {
+    gap: 0;
+  }
+}
+
+/* Make sure login container stays the same */
+.login-container {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  border-radius: 16px;
+  box-shadow: 0 24px 48px rgba(0, 0, 0, 0.15);
+  padding: 48px;
+  width: 100%;
+  max-width: 480px; /* Keep login container smaller */
+  margin: auto;
+  position: relative;
+  z-index: 2;
+  margin-top: 5vh;
+  margin-bottom: 5vh;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
