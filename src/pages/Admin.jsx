@@ -32,6 +32,10 @@ function Admin() {
     price: ''
   });
 
+  // User role editing states
+  const [editingUser, setEditingUser] = useState(null);
+  const [editingRole, setEditingRole] = useState('');
+
   // Booking management states
   const [selectedBooking, setSelectedBooking] = useState(null);
   const [showBookingModal, setShowBookingModal] = useState(false);
@@ -369,6 +373,45 @@ const handleFormChange = (field, value) => {
   }));
 };
 
+// User role management functions
+const handleEditUserRole = (user) => {
+  setEditingUser(user.id);
+  setEditingRole(user.role || 'User');
+};
+
+const handleSaveUserRole = async () => {
+  try {
+    const token = localStorage.getItem('userToken');
+    
+    const response = await fetch(`http://localhost:5244/api/Admin/user/${editingUser}/role`, {
+      method: 'PUT',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ role: editingRole })
+    });
+
+    if (response.ok) {
+      alert('User role updated successfully!');
+      setEditingUser(null);
+      setEditingRole('');
+      loadUsers(); // Reload users to show updated role
+    } else {
+      const errorData = await response.json();
+      alert(`Failed to update user role: ${errorData.message || 'Unknown error'}`);
+    }
+  } catch (error) {
+    console.error('Error updating user role:', error);
+    alert('Error updating user role. Please try again.');
+  }
+};
+
+const handleCancelUserRoleEdit = () => {
+  setEditingUser(null);
+  setEditingRole('');
+};
+
   // CRUD Operations - removed airline case
   const handleDelete = async (type, id) => {
     if (!window.confirm('Are you sure you want to delete this item?')) {
@@ -631,14 +674,85 @@ return (
                   <td>{user.name || 'N/A'}</td>
                   <td>{user.email || 'N/A'}</td>
                   <td>
-                    <span className={`role-badge ${user.role?.toLowerCase() || 'unknown'}`}>
-                      {user.role || 'N/A'}
-                    </span>
+                    {editingUser === user.id ? (
+                      <select
+                        value={editingRole}
+                        onChange={(e) => setEditingRole(e.target.value)}
+                        style={{
+                          padding: '4px 8px',
+                          border: '1px solid #ccc',
+                          borderRadius: '4px',
+                          fontSize: '14px',
+                          backgroundColor: 'white'
+                        }}
+                      >
+                        <option value="User">User</option>
+                        <option value="Admin">Admin</option>
+                        <option value="Flightowner">Flightowner</option>
+                      </select>
+                    ) : (
+                      <span className={`role-badge ${user.role?.toLowerCase() || 'unknown'}`}>
+                        {user.role || 'N/A'}
+                      </span>
+                    )}
                   </td>
                   <td>
-                    <button className="delete-btn" onClick={() => handleDelete('user', user.id)} title="Delete User">
-                      🗑️
-                    </button>
+                    {editingUser === user.id ? (
+                      <div style={{ display: 'flex', gap: '8px' }}>
+                        <button 
+                          onClick={handleSaveUserRole}
+                          style={{
+                            background: '#4CAF50',
+                            color: 'white',
+                            border: 'none',
+                            borderRadius: '4px',
+                            padding: '6px 12px',
+                            cursor: 'pointer',
+                            fontSize: '12px'
+                          }}
+                          title="Save Role"
+                        >
+                          ✅
+                        </button>
+                        <button 
+                          onClick={handleCancelUserRoleEdit}
+                          style={{
+                            background: '#f44336',
+                            color: 'white',
+                            border: 'none',
+                            borderRadius: '4px',
+                            padding: '6px 12px',
+                            cursor: 'pointer',
+                            fontSize: '12px'
+                          }}
+                          title="Cancel Edit"
+                        >
+                          ❌
+                        </button>
+                      </div>
+                    ) : (
+                      <div style={{ display: 'flex', gap: '8px' }}>
+                        <button 
+                          className="edit-btn" 
+                          onClick={() => handleEditUserRole(user)}
+                          title="Edit Role"
+                          style={{
+                            background: '#2196F3',
+                            color: 'white',
+                            border: 'none',
+                            borderRadius: '4px',
+                            padding: '6px 12px',
+                            cursor: 'pointer',
+                            fontSize: '12px'
+                          }}
+                        >
+                          ✏️
+                        </button>
+                        <button className="delete-btn" onClick={() => handleDelete('user', user.id)} title="Delete User">
+                          🗑️
+                        </button>
+                      </div>
+                    )}
                   </td>
                 </tr>
               ))
@@ -1013,8 +1127,11 @@ return (
                                   {booking.ticketBookingTime || 'N/A'}
                                 </div>
                                 <div className="booking-status">
-                                  <span className={`status-badge ${(booking.status || 'Confirmed').toLowerCase()}`}>
-                                    {booking.status || 'Confirmed'}
+                                  <span className={`status-badge ${(booking.status || 'Confirmed').toLowerCase().replace('requestedtocancel', 'requested')}`}>
+                                    {booking.status === 'RequestedToCancel' ? 'Cancellation Requested' : 
+                                     booking.status === 'Refunded' ? 'Refunded' :
+                                     booking.status === 'Cancelled' ? 'Cancelled' :
+                                     'Confirmed'}
                                   </span>
                                 </div>
                               </td>

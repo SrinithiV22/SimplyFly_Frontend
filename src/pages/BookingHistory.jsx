@@ -165,9 +165,9 @@ function BookingHistory() {
       console.log('Cancelling booking:', selectedBooking.bookingId);
       console.log('Using token:', token ? 'Token exists' : 'No token');
       
-      // Use the new alternative cancel endpoint with raw SQL
-      const response = await fetch(`http://localhost:5244/api/bookings/${selectedBooking.bookingId}/cancel`, {
-        method: 'DELETE',
+      // Use the new request cancellation endpoint
+      const response = await fetch(`http://localhost:5244/api/bookings/${selectedBooking.bookingId}/request-cancel`, {
+        method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`
@@ -200,11 +200,15 @@ function BookingHistory() {
       }
 
       const result = await response.json();
-      console.log('Delete successful:', result);
+      console.log('Cancellation request successful:', result);
 
-      // Remove the booking from the local state immediately
+      // Update the booking status in local state
       setUserBookings(prevBookings => 
-        prevBookings.filter(booking => booking.bookingId !== selectedBooking.bookingId)
+        prevBookings.map(booking => 
+          booking.bookingId === selectedBooking.bookingId 
+            ? { ...booking, status: 'RequestedToCancel' }
+            : booking
+        )
       );
       
       // Close the cancel modal and show refund confirmation
@@ -342,7 +346,12 @@ function BookingHistory() {
                         <p>Flight #{booking.flight?.id}</p>
                       </div>
                       <div className="booking-status">
-                        <span className="status confirmed">Confirmed</span>
+                        <span className={`status ${(booking.status || 'Confirmed').toLowerCase().replace('requestedtocancel', 'requested')}`}>
+                          {booking.status === 'RequestedToCancel' ? 'Cancellation Requested' : 
+                           booking.status === 'Refunded' ? 'Refunded' :
+                           booking.status === 'Cancelled' ? 'Cancelled' :
+                           'Confirmed'}
+                        </span>
                         <p className="booking-id">Booking #{booking.bookingId}</p>
                       </div>
                     </div>
@@ -374,12 +383,32 @@ function BookingHistory() {
                     </div>
 
                     <div className="booking-actions">
-                      <button 
-                        className="cancel-booking-btn"
-                        onClick={() => handleCancelBooking(booking)}
-                      >
-                        Cancel Booking
-                      </button>
+                      {(!booking.status || booking.status === 'Confirmed') && (
+                        <button 
+                          className="cancel-booking-btn"
+                          onClick={() => handleCancelBooking(booking)}
+                        >
+                          Request Cancellation
+                        </button>
+                      )}
+                      {booking.status === 'RequestedToCancel' && (
+                        <div className="status-message">
+                          <span className="status-icon">⏳</span>
+                          <span>Cancellation request pending flight owner approval</span>
+                        </div>
+                      )}
+                      {booking.status === 'Refunded' && (
+                        <div className="status-message">
+                          <span className="status-icon">✅</span>
+                          <span>Refund processed - Check your payment method</span>
+                        </div>
+                      )}
+                      {booking.status === 'Cancelled' && (
+                        <div className="status-message">
+                          <span className="status-icon">❌</span>
+                          <span>Booking cancelled</span>
+                        </div>
+                      )}
                     </div>
                   </div>
                 ))}
@@ -444,15 +473,15 @@ function BookingHistory() {
         <div className="modal-overlay">
           <div className="modal-content">
             <div className="modal-header">
-              <h3>✅ Booking Cancelled Successfully</h3>
+              <h3>✅ Cancellation Request Submitted</h3>
             </div>
             <div className="modal-body">
-              <p>Your booking has been cancelled successfully.</p>
+              <p>Your cancellation request has been submitted successfully.</p>
               <div className="refund-info">
-                <div className="refund-icon">💰</div>
-                <h4>Refund Information</h4>
-                <p>Your refund will be processed and credited to your original payment method within <strong>2-3 working days</strong>.</p>
-                <p className="refund-note">You will receive an email confirmation once the refund has been processed.</p>
+                <div className="refund-icon">⏳</div>
+                <h4>Next Steps</h4>
+                <p>Your cancellation request is now pending approval from the flight owner.</p>
+                <p className="refund-note">You will be notified once the flight owner reviews your request. If approved, the refund will be processed within 2-3 working days.</p>
               </div>
             </div>
             <div className="modal-footer">

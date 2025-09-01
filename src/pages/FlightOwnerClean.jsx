@@ -7,7 +7,7 @@ function FlightOwner() {
   const [loading, setLoading] = useState(true);
   
   // Navigation state
-  const [activeTab, setActiveTab] = useState('flights'); // 'users', 'flights', 'bookings'
+  const [activeTab, setActiveTab] = useState('flights'); // 'users', 'flights', 'bookings', 'refunds'
   
   // Data states
   const [flights, setFlights] = useState([]);
@@ -16,6 +16,11 @@ function FlightOwner() {
   const [bookings, setBookings] = useState([]);
   const [usersLoading, setUsersLoading] = useState(false);
   const [bookingsLoading, setBookingsLoading] = useState(false);
+  
+  // Refund requests state
+  const [refundRequests, setRefundRequests] = useState([]);
+  const [refundsLoading, setRefundsLoading] = useState(false);
+  const [processingRefund, setProcessingRefund] = useState(null);
 
   // Search states
   const [flightSearch, setFlightSearch] = useState('');
@@ -69,8 +74,8 @@ function FlightOwner() {
         const userRole = userData.Role || userData.role;
         console.log('User role:', userRole);
         
-        if (userRole === 'FlightOwner' || userRole === 'flightowner') {
-          console.log('Access granted - user is FlightOwner');
+        if (userRole === 'Flightowner') {
+          console.log('Access granted - user is Flightowner');
           setIsFlightOwner(true);
         } else {
           console.log('Access denied - user role is:', userRole);
@@ -96,6 +101,8 @@ function FlightOwner() {
         loadUsers();
       } else if (activeTab === 'bookings') {
         loadBookings();
+      } else if (activeTab === 'refunds') {
+        loadRefundRequests();
       }
     }
   }, [isFlightOwner, loading, activeTab]);
@@ -191,6 +198,113 @@ function FlightOwner() {
       setBookings([]);
     } finally {
       setBookingsLoading(false);
+    }
+  };
+
+  const loadRefundRequests = async () => {
+    setRefundsLoading(true);
+    try {
+      const token = localStorage.getItem('userToken');
+      
+      // Get all bookings and filter for RequestedToCancel status
+      const response = await fetch('http://localhost:5244/api/Admin/bookings', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        }
+      });
+
+      if (response.ok) {
+        const allBookings = await response.json();
+        // Filter for cancellation requests
+        const cancellationRequests = allBookings.filter(booking => 
+          booking.status === 'RequestedToCancel'
+        );
+        setRefundRequests(cancellationRequests || []);
+        console.log('Refund requests loaded:', cancellationRequests);
+      } else {
+        console.error('Failed to load refund requests:', response.status);
+        setRefundRequests([]);
+      }
+    } catch (error) {
+      console.error('Error loading refund requests:', error);
+      setRefundRequests([]);
+    } finally {
+      setRefundsLoading(false);
+    }
+  };
+
+  const handleApproveRefund = async (bookingId) => {
+    if (!window.confirm('Are you sure you want to approve this refund? This action cannot be undone.')) {
+      return;
+    }
+
+    try {
+      setProcessingRefund(bookingId);
+      const token = localStorage.getItem('userToken');
+      
+      const response = await fetch(`http://localhost:5244/api/FlightOwner/bookings/${bookingId}/approve-refund`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        }
+      });
+
+      if (response.ok) {
+        const result = await response.json();
+        alert(`Refund approved successfully! Amount: ₹${result.refundAmount?.toLocaleString('en-IN')}`);
+        
+        // Remove from local state
+        setRefundRequests(prevRequests => 
+          prevRequests.filter(request => request.bookingId !== bookingId)
+        );
+      } else {
+        const errorData = await response.json();
+        alert(`Error approving refund: ${errorData.message || 'Unknown error'}`);
+      }
+    } catch (error) {
+      console.error('Error approving refund:', error);
+      alert(`Error approving refund: ${error.message}`);
+    } finally {
+      setProcessingRefund(null);
+    }
+  };
+
+  const handleRejectRefund = async (bookingId) => {
+    if (!window.confirm('Are you sure you want to reject this refund request?')) {
+      return;
+    }
+
+    try {
+      setProcessingRefund(bookingId);
+      const token = localStorage.getItem('userToken');
+      
+      const response = await fetch(`http://localhost:5244/api/FlightOwner/bookings/${bookingId}/reject-refund`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        }
+      });
+
+      if (response.ok) {
+        alert('Refund request rejected successfully');
+        
+        // Remove from local state
+        setRefundRequests(prevRequests => 
+          prevRequests.filter(request => request.bookingId !== bookingId)
+        );
+      } else {
+        const errorData = await response.json();
+        alert(`Error rejecting refund: ${errorData.message || 'Unknown error'}`);
+      }
+    } catch (error) {
+      console.error('Error rejecting refund:', error);
+      alert(`Error rejecting refund: ${error.message}`);
+    } finally {
+      setProcessingRefund(null);
     }
   };
 
@@ -504,6 +618,14 @@ function FlightOwner() {
               <span className="sidebar-icon">🎫</span>
               Booking Management
             </div>
+            
+            <div 
+              className={`sidebar-item ${activeTab === 'refunds' ? 'active' : ''}`}
+              onClick={() => setActiveTab('refunds')}
+            >
+              <span className="sidebar-icon">💰</span>
+              Refund Requests
+            </div>
           </div>
         </div>
 
@@ -801,6 +923,97 @@ function FlightOwner() {
                           <td>{new Date(booking.bookingDate).toLocaleDateString()}</td>
                           <td>
                             <span className="role-badge admin">{booking.status || 'Confirmed'}</span>
+                          </td>
+                        </tr>
+                      ))
+                    )}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          )}
+
+          {/* Refunds Tab */}
+          {activeTab === 'refunds' && (
+            <div>
+              <div className="section-header">
+                <h1>💰 Refund Requests</h1>
+                <div className="section-actions">
+                  <button 
+                    onClick={loadRefundRequests} 
+                    className="refresh-btn"
+                    disabled={refundsLoading}
+                  >
+                    🔄
+                  </button>
+                </div>
+              </div>
+
+              <div className="data-table">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Booking ID</th>
+                      <th>Customer</th>
+                      <th>Flight</th>
+                      <th>Amount</th>
+                      <th>Booking Date</th>
+                      <th>Status</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {refundsLoading ? (
+                      <tr>
+                        <td colSpan="7" className="loading-state">
+                          Loading refund requests...
+                        </td>
+                      </tr>
+                    ) : refundRequests.length === 0 ? (
+                      <tr>
+                        <td colSpan="7" className="empty-state">
+                          <div className="empty-state-icon">💰</div>
+                          <h3>No refund requests</h3>
+                          <p>No customers have requested refunds at this time.</p>
+                        </td>
+                      </tr>
+                    ) : (
+                      refundRequests.map((request) => (
+                        <tr key={request.bookingId}>
+                          <td>{request.bookingId}</td>
+                          <td>
+                            <div>
+                              <div>{request.userName || 'Unknown'}</div>
+                              <div style={{fontSize: '12px', color: '#666'}}>
+                                {request.userEmail || 'Unknown'}
+                              </div>
+                            </div>
+                          </td>
+                          <td>{request.flightName || 'N/A'}</td>
+                          <td>₹{request.totalAmount?.toLocaleString('en-IN')}</td>
+                          <td>{new Date(request.bookingDate).toLocaleDateString()}</td>
+                          <td>
+                            <span className="status-badge requested">
+                              {request.status}
+                            </span>
+                          </td>
+                          <td>
+                            <div className="action-buttons">
+                              <button 
+                                onClick={() => handleApproveRefund(request.bookingId)}
+                                className="approve-btn"
+                                disabled={processingRefund === request.bookingId}
+                              >
+                                {processingRefund === request.bookingId ? '⏳' : '✅'} Approve
+                              </button>
+                              <button 
+                                onClick={() => handleRejectRefund(request.bookingId)}
+                                className="reject-btn"
+                                disabled={processingRefund === request.bookingId}
+                              >
+                                {processingRefund === request.bookingId ? '⏳' : '❌'} Reject
+                              </button>
+                            </div>
                           </td>
                         </tr>
                       ))

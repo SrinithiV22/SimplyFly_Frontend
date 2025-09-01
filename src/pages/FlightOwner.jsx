@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import './FlightOwner.css';
 
 function FlightOwner() {
-  const [activeTab, setActiveTab] = useState('users');
+  const [activeTab, setActiveTab] = useState('users'); // 'users', 'flights', 'bookings', 'refunds'
   const [isFlightOwner, setIsFlightOwner] = useState(null);
   const [showAccessAlert, setShowAccessAlert] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -17,6 +17,13 @@ function FlightOwner() {
   const [usersLoading, setUsersLoading] = useState(false);
   const [flightsLoading, setFlightsLoading] = useState(false);
   const [bookingsLoading, setBookingsLoading] = useState(false);
+  
+  // Refund requests state
+  const [refundRequests, setRefundRequests] = useState([]);
+  const [refundsLoading, setRefundsLoading] = useState(false);
+  const [processingRefund, setProcessingRefund] = useState(null);
+  const [showCancellationModal, setShowCancellationModal] = useState(false);
+  const [selectedBookingForCancellation, setSelectedBookingForCancellation] = useState(null);
   
   // Search states
   const [userSearch, setUserSearch] = useState('');
@@ -91,6 +98,8 @@ function FlightOwner() {
         loadFlights();
       } else if (activeTab === 'bookings') {
         loadBookings();
+      } else if (activeTab === 'refunds') {
+        loadRefundRequests();
       }
     }
   }, [isFlightOwner, activeTab]);
@@ -315,80 +324,208 @@ function FlightOwner() {
     setBookingsLoading(true);
     try {
       const token = localStorage.getItem('userToken');
-      console.log('📋 Loading bookings...');
-      console.log('🔐 Token:', token ? 'Present' : 'Missing');
+      const userData = JSON.parse(localStorage.getItem('userData') || '{}');
+      const userId = userData.userId || userData.UserId;
       
+      console.log('📋 Loading bookings for userId:', userId);
+      
+      // Try multiple endpoints to get booking data
       let bookingsData = [];
       
-      // Try Admin/bookings first
+      // First try Admin/bookings (most reliable)
       try {
-        console.log('🔄 Trying Admin/bookings endpoint...');
-        const response = await fetch('http://localhost:5244/api/Admin/bookings', {
+        console.log('📋 Trying Admin/bookings endpoint...');
+        const adminResponse = await fetch('http://localhost:5244/api/Admin/bookings', {
           method: 'GET',
           headers: {
-            'Authorization': `Bearer ${token}`,
-            'Content-Type': 'application/json',
+            'Content-Type': 'application/json'
           },
         });
-        
-        console.log('📋 Admin/bookings response status:', response.status);
-        
-        if (response.ok) {
-          bookingsData = await response.json();
-          console.log('📋 Admin/bookings data:', bookingsData);
-        } else {
-          console.log('❌ Admin/bookings failed, trying alternative...');
-          // Try bookings endpoint as fallback
-          const altResponse = await fetch('http://localhost:5244/api/bookings', {
+
+        console.log('📋 Admin/bookings response status:', adminResponse.status);
+
+        if (adminResponse.ok) {
+          bookingsData = await adminResponse.json();
+          console.log('📋 Admin bookings loaded:', bookingsData);
+        }
+      } catch (error) {
+        console.log('📋 Admin endpoint failed, trying alternatives...');
+      }
+
+      // If no data from admin endpoint, try FlightOwner specific endpoint
+      if (bookingsData.length === 0 && userId) {
+        try {
+          console.log('📋 Trying FlightOwner/bookings endpoint...');
+          const ownerResponse = await fetch(`http://localhost:5244/api/FlightOwner/bookings/${userId}`, {
             method: 'GET',
             headers: {
               'Authorization': `Bearer ${token}`,
               'Content-Type': 'application/json',
             },
           });
-          
-          console.log('📋 Bookings endpoint response status:', altResponse.status);
-          
-          if (altResponse.ok) {
-            bookingsData = await altResponse.json();
-            console.log('📋 Bookings endpoint data:', bookingsData);
+
+          if (ownerResponse.ok) {
+            bookingsData = await ownerResponse.json();
+            console.log('📋 FlightOwner bookings loaded:', bookingsData);
           }
+        } catch (error) {
+          console.log('📋 FlightOwner endpoint failed');
         }
-      } catch (error) {
-        console.error('Error fetching bookings:', error);
       }
 
-      // Process the data
-      if (Array.isArray(bookingsData) && bookingsData.length > 0) {
-        console.log('🔄 Processing bookings data...');
-        console.log('📝 First booking object:', bookingsData[0]);
-        console.log('🔑 Booking properties:', Object.keys(bookingsData[0]));
-        
-        // Normalize booking data to ensure consistent field names
-        const normalizedBookings = bookingsData.map(booking => ({
-          ...booking,
-          bookingId: booking.bookingId || booking.BookingId || booking.id || booking.Id,
-          userName: booking.userName || booking.UserName || booking.customerName || booking.CustomerName,
-          // Use the "Flight" column from bookings table for flight name
-          flightName: booking.flight || booking.Flight || booking.flightName || booking.FlightName || `Flight ${booking.flightId || booking.FlightId}`,
-          flightId: booking.flightId || booking.FlightId,
-          passengerCount: booking.passengerCount || booking.PassengerCount || booking.passengers || booking.Passengers || 1,
-          totalAmount: booking.totalAmount || booking.TotalAmount || booking.amount || booking.Amount,
-          status: booking.status || booking.Status || 'Confirmed',
-          bookingDate: booking.bookingDate || booking.BookingDate || booking.createdAt || booking.CreatedAt
-        }));
-        
-        console.log('✅ Processed bookings:', normalizedBookings);
-        setBookings(normalizedBookings);
-      } else {
-        console.log('❌ No valid bookings data received');
-        setBookings([]);
-      }
+      setBookings(bookingsData || []);
     } catch (error) {
       console.error('Error loading bookings:', error);
       setBookings([]);
     } finally {
       setBookingsLoading(false);
+    }
+  };
+
+  const loadRefundRequests = async () => {
+    setRefundsLoading(true);
+    try {
+      const token = localStorage.getItem('userToken');
+      
+      console.log('💰 Loading refund requests...');
+      
+      // Get all bookings and filter for RequestedToCancel status
+      const response = await fetch('http://localhost:5244/api/Admin/bookings', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        }
+      });
+
+      console.log('💰 Refund requests response status:', response.status);
+
+      if (response.ok) {
+        const allBookings = await response.json();
+        console.log('💰 All bookings for refund filtering:', allBookings);
+        
+        // Filter for refund requests (RequestedToCancel status)
+        const cancellationRequests = allBookings.filter(booking => 
+          booking.status === 'RequestedToCancel' || booking.Status === 'RequestedToCancel'
+        );
+        
+        console.log('💰 Filtered refund requests:', cancellationRequests);
+        setRefundRequests(cancellationRequests || []);
+      } else {
+        console.error('Failed to load refund requests:', response.status);
+        // For demo purposes, let's create some sample refund requests if no real data exists
+        const sampleRefunds = [];
+        setRefundRequests(sampleRefunds);
+      }
+    } catch (error) {
+      console.error('Error loading refund requests:', error);
+      setRefundRequests([]);
+    } finally {
+      setRefundsLoading(false);
+    }
+  };
+
+  const handleApproveRefund = async (bookingId) => {
+    if (!window.confirm('Are you sure you want to approve this refund? This action cannot be undone.')) {
+      return;
+    }
+
+    try {
+      setProcessingRefund(bookingId);
+      const token = localStorage.getItem('userToken');
+      
+      const response = await fetch(`http://localhost:5244/api/FlightOwner/bookings/${bookingId}/approve-refund`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        }
+      });
+
+      if (response.ok) {
+        const result = await response.json();
+        alert(`Refund approved successfully! Amount: ₹${result.refundAmount?.toLocaleString('en-IN')}`);
+        
+        // Remove from local state
+        setRefundRequests(prevRequests => 
+          prevRequests.filter(request => request.bookingId !== bookingId)
+        );
+      } else {
+        const errorData = await response.json();
+        alert(`Error approving refund: ${errorData.message || 'Unknown error'}`);
+      }
+    } catch (error) {
+      console.error('Error approving refund:', error);
+      alert(`Error approving refund: ${error.message}`);
+    } finally {
+      setProcessingRefund(null);
+    }
+  };
+
+  const handleRejectRefund = async (bookingId) => {
+    if (!window.confirm('Are you sure you want to reject this refund request?')) {
+      return;
+    }
+
+    try {
+      setProcessingRefund(bookingId);
+      const token = localStorage.getItem('userToken');
+
+      const response = await fetch(`http://localhost:5244/api/FlightOwner/bookings/${bookingId}/reject-refund`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        }
+      });
+
+      if (response.ok) {
+        alert('Refund request rejected successfully!');
+        loadRefundRequests(); // Reload the refund requests
+      } else {
+        const errorData = await response.json();
+        alert(`Failed to reject refund: ${errorData.message || 'Unknown error'}`);
+      }
+    } catch (error) {
+      console.error('Error rejecting refund:', error);
+      alert('An error occurred while rejecting the refund request.');
+    } finally {
+      setProcessingRefund(null);
+    }
+  };
+
+  const handleCancellationRequest = (booking) => {
+    setSelectedBookingForCancellation(booking);
+    setShowCancellationModal(true);
+  };
+
+  const handleConfirmCancellation = async () => {
+    if (!selectedBookingForCancellation) return;
+
+    try {
+      const token = localStorage.getItem('userToken');
+      const response = await fetch(`http://localhost:5244/api/Admin/bookings/${selectedBookingForCancellation.bookingId}/status`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({ status: 'Cancelled' })
+      });
+
+      if (response.ok) {
+        alert('Booking cancelled successfully!');
+        setShowCancellationModal(false);
+        setSelectedBookingForCancellation(null);
+        loadBookings(); // Reload bookings to reflect the change
+        loadRefundRequests(); // Also reload refund requests
+      } else {
+        const errorData = await response.json();
+        alert(`Failed to cancel booking: ${errorData.message || 'Unknown error'}`);
+      }
+    } catch (error) {
+      console.error('Error cancelling booking:', error);
+      alert('An error occurred while cancelling the booking.');
     }
   };
 
@@ -656,6 +793,13 @@ function FlightOwner() {
             >
               <span className="sidebar-icon">🎫</span>
               Booking Management
+            </div>
+            <div 
+              className={`sidebar-item ${activeTab === 'refunds' ? 'active' : ''}`}
+              onClick={() => setActiveTab('refunds')}
+            >
+              <span className="sidebar-icon">💰</span>
+              Refund Requests
             </div>
           </div>
         </div>
@@ -1032,9 +1176,28 @@ function FlightOwner() {
                                   {booking.ticketBookingTime || 'N/A'}
                                 </div>
                                 <div className="booking-status">
-                                  <span className={`status-badge ${(booking.status || 'Confirmed').toLowerCase()}`}>
-                                    {booking.status || 'Confirmed'}
-                                  </span>
+                                  {booking.status === 'RequestedToCancel' ? (
+                                    <button 
+                                      className="cancel-request-btn"
+                                      onClick={() => handleCancellationRequest(booking)}
+                                      style={{
+                                        background: '#e74c3c',
+                                        color: 'white',
+                                        border: 'none',
+                                        padding: '6px 12px',
+                                        borderRadius: '4px',
+                                        cursor: 'pointer',
+                                        fontSize: '12px',
+                                        fontWeight: 'bold'
+                                      }}
+                                    >
+                                      🚫 Cancellation Request
+                                    </button>
+                                  ) : (
+                                    <span className={`status-badge ${(booking.status || 'Confirmed').toLowerCase()}`}>
+                                      {booking.status || 'Confirmed'}
+                                    </span>
+                                  )}
                                 </div>
                               </td>
                             </tr>
@@ -1059,6 +1222,147 @@ function FlightOwner() {
                       </tbody>
                     </table>
                   </div>
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* Refund Requests Tab */}
+          {activeTab === 'refunds' && (
+            <div className="refunds-section">
+              <div className="section-header">
+                <h1>💰 Refund Requests</h1>
+                <div className="section-actions">
+                  <button className="refresh-btn" onClick={loadRefundRequests} disabled={refundsLoading}>
+                    {refundsLoading ? '⟳' : '🔄'} Refresh
+                  </button>
+                </div>
+              </div>
+
+              {refundsLoading ? (
+                <div className="loading-state">Loading refund requests...</div>
+              ) : (
+                <div className="data-table">
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>Booking ID</th>
+                        <th>Customer</th>
+                        <th>Flight</th>
+                        <th>Amount</th>
+                        <th>Booking Date</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {refundRequests.length > 0 ? (
+                        refundRequests.map((request, index) => (
+                          <tr key={request.bookingId || index}>
+                            <td>
+                              <span style={{ 
+                                background: '#3498db', 
+                                padding: '4px 8px', 
+                                borderRadius: '4px', 
+                                fontWeight: 'bold',
+                                color: 'white'
+                              }}>
+                                {request.bookingId}
+                              </span>
+                            </td>
+                            <td>
+                              <div>
+                                <div style={{ fontWeight: 'bold' }}>{request.userName || 'Unknown'}</div>
+                                <div style={{ fontSize: '12px', color: '#666' }}>
+                                  {request.userEmail || 'Unknown'}
+                                </div>
+                              </div>
+                            </td>
+                            <td>
+                              <span style={{ 
+                                background: '#27ae60', 
+                                padding: '4px 8px', 
+                                borderRadius: '4px', 
+                                fontWeight: 'bold',
+                                color: 'white'
+                              }}>
+                                {request.flightName || 'N/A'}
+                              </span>
+                            </td>
+                            <td>
+                              <span style={{ 
+                                background: '#9b59b6', 
+                                padding: '4px 8px', 
+                                borderRadius: '4px', 
+                                fontWeight: 'bold',
+                                color: 'white'
+                              }}>
+                                ₹{request.totalAmount?.toLocaleString('en-IN') || 'N/A'}
+                              </span>
+                            </td>
+                            <td>{request.bookingDate ? new Date(request.bookingDate).toLocaleDateString() : 'N/A'}</td>
+                            <td>
+                              <span style={{ 
+                                background: '#f39c12', 
+                                padding: '4px 8px', 
+                                borderRadius: '4px', 
+                                fontWeight: 'bold',
+                                color: 'white'
+                              }}>
+                                {request.status}
+                              </span>
+                            </td>
+                            <td>
+                              <div style={{ display: 'flex', gap: '8px', justifyContent: 'center' }}>
+                                <button 
+                                  style={{
+                                    background: '#27ae60',
+                                    color: 'white',
+                                    border: 'none',
+                                    padding: '6px 12px',
+                                    borderRadius: '4px',
+                                    cursor: 'pointer',
+                                    fontSize: '12px',
+                                    fontWeight: 'bold'
+                                  }}
+                                  onClick={() => handleApproveRefund(request.bookingId)}
+                                  disabled={processingRefund === request.bookingId}
+                                  title="Approve Refund"
+                                >
+                                  {processingRefund === request.bookingId ? '⏳' : '✅'} Approve
+                                </button>
+                                <button 
+                                  style={{
+                                    background: '#e74c3c',
+                                    color: 'white',
+                                    border: 'none',
+                                    padding: '6px 12px',
+                                    borderRadius: '4px',
+                                    cursor: 'pointer',
+                                    fontSize: '12px',
+                                    fontWeight: 'bold'
+                                  }}
+                                  onClick={() => handleRejectRefund(request.bookingId)}
+                                  disabled={processingRefund === request.bookingId}
+                                  title="Reject Refund"
+                                >
+                                  {processingRefund === request.bookingId ? '⏳' : '❌'} Reject
+                                </button>
+                              </div>
+                            </td>
+                          </tr>
+                        ))
+                      ) : (
+                        <tr>
+                          <td colSpan="7" style={{ textAlign: 'center', padding: '40px', color: '#666' }}>
+                            <div style={{ fontSize: '48px', marginBottom: '16px' }}>💰</div>
+                            <div style={{ fontSize: '18px', fontWeight: 'bold', marginBottom: '8px' }}>No Refund Requests</div>
+                            <div>No customers have requested refunds at this time.</div>
+                          </td>
+                        </tr>
+                      )}
+                    </tbody>
+                  </table>
                 </div>
               )}
             </div>
@@ -1328,6 +1632,94 @@ function FlightOwner() {
                 </button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+
+      {/* Cancellation Confirmation Modal */}
+      {showCancellationModal && selectedBookingForCancellation && (
+        <div className="modal-overlay" onClick={() => setShowCancellationModal(false)}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()} style={{
+            maxWidth: '500px',
+            background: 'white',
+            padding: '24px',
+            borderRadius: '8px',
+            boxShadow: '0 4px 20px rgba(0,0,0,0.15)'
+          }}>
+            <div className="modal-header" style={{ marginBottom: '20px', textAlign: 'center' }}>
+              <h3 style={{ margin: 0, color: '#e74c3c' }}>⚠️ Confirm Cancellation</h3>
+            </div>
+            
+            <div style={{ marginBottom: '20px' }}>
+              <p style={{ textAlign: 'center', marginBottom: '16px' }}>
+                Are you sure you want to approve this cancellation request?
+              </p>
+              
+              <div style={{ 
+                background: '#f8f9fa', 
+                padding: '16px', 
+                borderRadius: '8px',
+                border: '1px solid #dee2e6'
+              }}>
+                <div style={{ marginBottom: '8px' }}>
+                  <strong>Booking ID:</strong> #{selectedBookingForCancellation.bookingId}
+                </div>
+                <div style={{ marginBottom: '8px' }}>
+                  <strong>Customer:</strong> {selectedBookingForCancellation.userName || 'Unknown'}
+                </div>
+                <div style={{ marginBottom: '8px' }}>
+                  <strong>Flight:</strong> {selectedBookingForCancellation.flightName || selectedBookingForCancellation.flight || 'N/A'}
+                </div>
+                <div style={{ marginBottom: '8px' }}>
+                  <strong>Route:</strong> {selectedBookingForCancellation.route || 'N/A'}
+                </div>
+                <div>
+                  <strong>Amount:</strong> ₹{selectedBookingForCancellation.totalAmount?.toLocaleString('en-IN') || 'N/A'}
+                </div>
+              </div>
+              
+              <p style={{ 
+                textAlign: 'center', 
+                marginTop: '16px', 
+                color: '#dc3545',
+                fontSize: '14px',
+                fontStyle: 'italic'
+              }}>
+                This action will cancel the booking and process the refund.
+              </p>
+            </div>
+
+            <div style={{ display: 'flex', gap: '12px', justifyContent: 'center' }}>
+              <button 
+                type="button" 
+                onClick={() => setShowCancellationModal(false)}
+                style={{
+                  padding: '10px 20px',
+                  border: '2px solid #6c757d',
+                  background: 'white',
+                  color: '#6c757d',
+                  borderRadius: '6px',
+                  cursor: 'pointer',
+                  fontWeight: 'bold'
+                }}
+              >
+                No, Keep Booking
+              </button>
+              <button 
+                onClick={handleConfirmCancellation}
+                style={{
+                  padding: '10px 20px',
+                  border: 'none',
+                  background: '#dc3545',
+                  color: 'white',
+                  borderRadius: '6px',
+                  cursor: 'pointer',
+                  fontWeight: 'bold'
+                }}
+              >
+                Yes, Cancel Booking
+              </button>
+            </div>
           </div>
         </div>
       )}
