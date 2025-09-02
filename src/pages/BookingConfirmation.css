@@ -316,7 +316,21 @@
   }
 }
 
-/* Responsive Design */
+/* Enhanced Responsive Design */
+@media (max-width: 1024px) {
+  .confirmation-content {
+    padding: 1.5rem;
+  }
+  
+  .success-banner {
+    padding: 2.5rem 1.5rem;
+  }
+  
+  .booking-ticket {
+    padding: 1.5rem;
+  }
+}
+
 @media (max-width: 768px) {
   .header-content {
     flex-direction: column;
@@ -327,10 +341,29 @@
   .nav-menu {
     flex-wrap: wrap;
     justify-content: center;
+    gap: 0.5rem;
+  }
+  
+  .nav-link {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.9rem;
   }
 
   .confirmation-content {
     padding: 1rem;
+  }
+  
+  .success-banner {
+    padding: 2rem 1rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .success-banner h1 {
+    font-size: 2rem;
+  }
+  
+  .success-banner p {
+    font-size: 1.1rem;
   }
 
   .ticket-header {
@@ -338,11 +371,19 @@
     gap: 1rem;
     text-align: center;
   }
+  
+  .ticket-header h2 {
+    font-size: 1.5rem;
+  }
 
   .route-info {
     grid-template-columns: 1fr;
     gap: 1rem;
     text-align: center;
+  }
+  
+  .route-text {
+    font-size: 1.1rem;
   }
 
   .passenger-details {
@@ -351,6 +392,7 @@
 
   .ticket-actions {
     flex-direction: column;
+    gap: 0.8rem;
   }
 
   .passenger-header {
@@ -358,24 +400,86 @@
     gap: 0.5rem;
     text-align: center;
   }
+  
+  .flight-details {
+    padding: 1.2rem;
+  }
+  
+  .passenger-card {
+    padding: 1.2rem;
+  }
+  
+  .important-info {
+    padding: 1.2rem;
+  }
 }
 
 @media (max-width: 480px) {
+  .confirmation-content {
+    padding: 0.8rem;
+  }
+  
+  .success-banner {
+    padding: 1.5rem 0.8rem;
+    border-radius: 10px;
+  }
+
   .success-banner h1 {
-    font-size: 2rem;
+    font-size: 1.8rem;
   }
 
   .success-banner p {
     font-size: 1rem;
   }
+  
+  .success-icon {
+    font-size: 3rem;
+  }
 
   .booking-ticket {
     padding: 1rem;
+    border-radius: 10px;
+  }
+  
+  .ticket-header h2 {
+    font-size: 1.3rem;
+  }
+  
+  .booking-id {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.9rem;
   }
 
   .detail-row {
     flex-direction: column;
     gap: 0.3rem;
     text-align: center;
+    padding: 0.4rem;
+  }
+  
+  .flight-details,
+  .passenger-card,
+  .important-info {
+    padding: 1rem;
+    border-radius: 8px;
+  }
+  
+  .btn-primary,
+  .btn-secondary {
+    padding: 0.8rem 1rem;
+    font-size: 0.9rem;
+  }
+  
+  .route-text {
+    font-size: 1rem;
+  }
+  
+  .passenger-header h4 {
+    font-size: 1rem;
+  }
+  
+  .seat-number {
+    padding: 0.2rem 0.6rem;
+    font-size: 0.8rem;
   }
 }

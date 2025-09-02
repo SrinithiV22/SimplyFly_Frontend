@@ -346,11 +346,11 @@ function BookingHistory() {
                         <p>Flight #{booking.flight?.id}</p>
                       </div>
                       <div className="booking-status">
-                        <span className={`status ${(booking.status || 'Confirmed').toLowerCase().replace('requestedtocancel', 'requested')}`}>
-                          {booking.status === 'RequestedToCancel' ? 'Cancellation Requested' : 
-                           booking.status === 'Refunded' ? 'Refunded' :
-                           booking.status === 'Cancelled' ? 'Cancelled' :
-                           'Confirmed'}
+                      <span className={`status ${(booking.status || '').toLowerCase().replace('requestedtocancel', 'requested')}`}>
+                      {(booking.Status === 'RequestedToCancel' || booking.status === 'RequestedToCancel') ? 'Cancellation Requested' : 
+                        (booking.Status === 'Refunded' || booking.status === 'Refunded') ? 'Refunded' :
+                        (booking.Status === 'Cancelled' || booking.status === 'Cancelled') ? 'Cancelled' :
+                        (booking.Status === 'Confirmed' || booking.status === 'Confirmed') ? 'Confirmed' : 'Unknown'}
                         </span>
                         <p className="booking-id">Booking #{booking.bookingId}</p>
                       </div>
@@ -383,14 +383,14 @@ function BookingHistory() {
                     </div>
 
                     <div className="booking-actions">
-                      {(!booking.status || booking.status === 'Confirmed') && (
-                        <button 
-                          className="cancel-booking-btn"
-                          onClick={() => handleCancelBooking(booking)}
-                        >
-                          Request Cancellation
-                        </button>
-                      )}
+                    {(booking.status && booking.status.toLowerCase() === 'confirmed') && (
+                          <button 
+                            className="cancel-booking-btn"
+                            onClick={() => handleCancelBooking(booking)}
+                          >
+                            Request Cancellation
+                          </button>
+                        )}
                       {booking.status === 'RequestedToCancel' && (
                         <div className="status-message">
                           <span className="status-icon">⏳</span>

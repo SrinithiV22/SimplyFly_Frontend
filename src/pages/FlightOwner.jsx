@@ -373,7 +373,12 @@ function FlightOwner() {
         }
       }
 
-      setBookings(bookingsData || []);
+      // Mark RequestedToCancel bookings clearly
+      const updatedBookings = (bookingsData || []).map(booking => ({
+        ...booking,
+        status: booking.Status || booking.status,
+      }));
+      setBookings(updatedBookings);
     } catch (error) {
       console.error('Error loading bookings:', error);
       setBookings([]);
@@ -386,36 +391,29 @@ function FlightOwner() {
     setRefundsLoading(true);
     try {
       const token = localStorage.getItem('userToken');
-      
-      console.log('💰 Loading refund requests...');
-      
-      // Get all bookings and filter for RequestedToCancel status
-      const response = await fetch('http://localhost:5244/api/Admin/bookings', {
+      const userData = JSON.parse(localStorage.getItem('userData') || '{}');
+      const userId = userData.userId || userData.UserId;
+      if (!userId) {
+        setRefundRequests([]);
+        setRefundsLoading(false);
+        return;
+      }
+      // Get bookings for this flight owner and filter for RequestedToCancel status
+      const response = await fetch(`http://localhost:5244/api/FlightOwner/bookings/${userId}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`
         }
       });
-
-      console.log('💰 Refund requests response status:', response.status);
-
       if (response.ok) {
-        const allBookings = await response.json();
-        console.log('💰 All bookings for refund filtering:', allBookings);
-        
-        // Filter for refund requests (RequestedToCancel status)
-        const cancellationRequests = allBookings.filter(booking => 
-          booking.status === 'RequestedToCancel' || booking.Status === 'RequestedToCancel'
+        const ownerBookings = await response.json();
+        const cancellationRequests = ownerBookings.filter(booking => 
+          booking.Status === 'RequestedToCancel' || booking.status === 'RequestedToCancel'
         );
-        
-        console.log('💰 Filtered refund requests:', cancellationRequests);
         setRefundRequests(cancellationRequests || []);
       } else {
-        console.error('Failed to load refund requests:', response.status);
-        // For demo purposes, let's create some sample refund requests if no real data exists
-        const sampleRefunds = [];
-        setRefundRequests(sampleRefunds);
+        setRefundRequests([]);
       }
     } catch (error) {
       console.error('Error loading refund requests:', error);
@@ -445,11 +443,9 @@ function FlightOwner() {
       if (response.ok) {
         const result = await response.json();
         alert(`Refund approved successfully! Amount: ₹${result.refundAmount?.toLocaleString('en-IN')}`);
-        
-        // Remove from local state
-        setRefundRequests(prevRequests => 
-          prevRequests.filter(request => request.bookingId !== bookingId)
-        );
+        // Reload bookings and refund requests to reflect changes
+        loadBookings();
+        loadRefundRequests();
       } else {
         const errorData = await response.json();
         alert(`Error approving refund: ${errorData.message || 'Unknown error'}`);
@@ -481,7 +477,9 @@ function FlightOwner() {
 
       if (response.ok) {
         alert('Refund request rejected successfully!');
-        loadRefundRequests(); // Reload the refund requests
+        // Reload bookings and refund requests to reflect changes
+        loadBookings();
+        loadRefundRequests();
       } else {
         const errorData = await response.json();
         alert(`Failed to reject refund: ${errorData.message || 'Unknown error'}`);
@@ -1176,28 +1174,34 @@ function FlightOwner() {
                                   {booking.ticketBookingTime || 'N/A'}
                                 </div>
                                 <div className="booking-status">
-                                  {booking.status === 'RequestedToCancel' ? (
-                                    <button 
-                                      className="cancel-request-btn"
-                                      onClick={() => handleCancellationRequest(booking)}
-                                      style={{
-                                        background: '#e74c3c',
-                                        color: 'white',
-                                        border: 'none',
-                                        padding: '6px 12px',
-                                        borderRadius: '4px',
-                                        cursor: 'pointer',
-                                        fontSize: '12px',
-                                        fontWeight: 'bold'
-                                      }}
-                                    >
-                                      🚫 Cancellation Request
-                                    </button>
-                                  ) : (
-                                    <span className={`status-badge ${(booking.status || 'Confirmed').toLowerCase()}`}>
-                                      {booking.status || 'Confirmed'}
-                                    </span>
-                                  )}
+                                {(() => {
+                                    const status = booking.Status || booking.status || 'Confirmed';
+                                    if (status === 'RequestedToCancel') {
+                                      return (
+                                        <span className="status-badge requested" style={{ background: '#f1c40f', color: '#222' }}>
+                                          Cancellation Requested
+                                        </span>
+                                      );
+                                    } else if (status === 'Refunded') {
+                                      return (
+                                        <span className="status-badge refunded" style={{ background: '#27ae60', color: 'white' }}>
+                                          Refunded
+                                        </span>
+                                      );
+                                    } else if (status === 'Cancelled') {
+                                      return (
+                                        <span className="status-badge cancelled" style={{ background: '#e74c3c', color: 'white' }}>
+                                          Cancelled
+                                        </span>
+                                      );
+                                    } else {
+                                      return (
+                                        <span className="status-badge confirmed" style={{ background: '#2ecc71', color: 'white' }}>
+                                          Confirmed
+                                        </span>
+                                      );
+                                    }
+                                  })()}
                                 </div>
                               </td>
                             </tr>

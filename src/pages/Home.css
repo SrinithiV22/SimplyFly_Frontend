@@ -1036,47 +1036,457 @@ button[class*="logout"]:hover {
 @media (max-width: 1024px) {
   .content-wrapper {
     grid-template-columns: 1fr;
+    gap: 30px;
+  }
+  
+  .navbar-container {
+    padding: 16px 15px;
+  }
+  
+  .search-form-container {
+    padding: 25px;
+  }
+  
+  .search-header {
+    padding: 25px 25px 20px;
   }
 }
 
 @media (max-width: 768px) {
   .navbar-menu {
-    display: none;
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: white;
+    border-top: 1px solid #e0e0e0;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    padding: 15px 20px;
+    gap: 15px;
+    transform: translateY(-10px);
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+    z-index: 1000;
+  }
+  
+  .navbar-menu.mobile-open {
+    transform: translateY(0);
+    opacity: 1;
+    visibility: visible;
+  }
+  
+  .mobile-menu-toggle {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    cursor: pointer;
+    padding: 8px;
+    z-index: 1001;
+  }
+
+  .mobile-menu-toggle span {
+    width: 20px;
+    height: 2px;
+    background: #333;
+    transition: all 0.3s ease;
+  }
+  
+  .navbar-container {
+    position: relative;
+    height: 60px;
+    padding: 0 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .navbar-auth {
+    display: flex;
+    align-items: center;
+  }
+  
+  .logo-text {
+    font-size: 18px;
   }
   
   .main-content {
-    padding: 20px 16px;
+    padding: 20px 10px;
   }
   
-  .cities-row {
-    flex-direction: column;
+  .content-wrapper {
+    gap: 20px;
   }
   
-  .swap-cities-btn {
-    transform: rotate(90deg);
+  .search-header {
+    padding: 20px 20px 15px;
   }
   
-  .date-row {
-    flex-direction: column;
+  .search-header h1 {
+    font-size: 26px;
+  }
+  
+  .search-header p {
+    font-size: 14px;
+  }
+  
+  .search-form-container {
+    padding: 20px;
   }
   
   .trip-type-row {
     flex-direction: column;
     align-items: flex-start;
-    gap: 16px;
+    gap: 15px;
+    margin-bottom: 25px;
+  }
+  
+  .trip-type-group {
+    gap: 20px;
+  }
+  
+  .passenger-display {
+    min-width: 100%;
+    justify-content: space-between;
+  }
+  
+  .cities-row {
+    flex-direction: column;
+    gap: 12px;
+  }
+  
+  .swap-cities-btn {
+    transform: rotate(90deg);
+    align-self: center;
+    margin: 8px 0;
+  }
+  
+  .city-search-input {
+    font-size: 15px;
+    padding: 14px 40px 14px 40px;
+    min-height: 50px;
+  }
+  
+  .date-row {
+    flex-direction: column;
+    gap: 12px;
+  }
+  
+  .date-input {
+    min-height: 50px;
+  }
+  
+  .date-content {
+    padding: 14px;
+    padding-left: 40px;
+  }
+  
+  .date-display {
+    font-size: 15px;
+  }
+  
+  .fare-options {
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+  
+  .fare-option {
+    padding: 6px 14px;
+    font-size: 13px;
+  }
+  
+  .special-offer {
+    padding: 14px;
+    margin-bottom: 25px;
+  }
+  
+  .search-flights-btn {
+    padding: 14px;
+    font-size: 15px;
+  }
+  
+  .calendar-popup {
+    min-width: 300px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 20px;
+  }
+  
+  .calendar-grid {
+    width: 100%;
+  }
+  
+  .calendar-weekdays {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 2px;
+    margin-bottom: 10px;
+  }
+  
+  .weekday {
+    text-align: center;
+    font-size: 12px;
+    font-weight: 600;
+    color: #666;
+    padding: 8px 4px;
+  }
+  
+  .calendar-days {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 2px;
+  }
+  
+  .calendar-day {
+    position: relative;
+    min-height: 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    border-radius: 6px;
+    transition: all 0.3s ease;
+    padding: 4px;
+    font-weight: 500;
+    font-size: 14px;
   }
   
   .destinations-mini-grid {
     grid-template-columns: 1fr;
+    gap: 12px;
   }
-}
-
-@media (max-width: 480px) {
-  .search-header h1 {
-    font-size: 24px;
+  
+  .destination-mini-card {
+    padding: 10px;
+  }
+  
+  .popular-destinations {
+    padding: 60px 0;
   }
   
   .popular-destinations h2 {
     font-size: 28px;
+    margin-bottom: 32px;
+  }
+  
+  .destinations-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  
+  .destination-image {
+    height: 160px;
+    font-size: 50px;
+  }
+  
+  .destination-info {
+    padding: 20px;
+  }
+  
+  .destination-info h3 {
+    font-size: 20px;
+  }
+  
+  .destination-info p {
+    font-size: 14px;
+  }
+  
+  .features-section {
+    padding: 60px 0;
+  }
+  
+  .features-grid {
+    grid-template-columns: 1fr;
+    gap: 30px;
+  }
+  
+  .feature-card {
+    padding: 30px 15px;
+  }
+  
+  .feature-icon {
+    font-size: 40px;
+    margin-bottom: 20px;
+  }
+  
+  .feature-card h3 {
+    font-size: 20px;
+  }
+  
+  .feature-card p {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .main-content {
+    padding: 15px 5px;
+  }
+  
+  .search-section {
+    border-radius: 8px;
+    margin: 0;
+  }
+  
+  .search-header {
+    padding: 15px 15px 12px;
+  }
+  
+  .search-header h1 {
+    font-size: 22px;
+  }
+  
+  .search-header p {
+    font-size: 13px;
+  }
+  
+  .search-form-container {
+    padding: 15px;
+  }
+  
+  .trip-type-group {
+    gap: 15px;
+    flex-wrap: wrap;
+  }
+  
+  .trip-type-group label {
+    font-size: 13px;
+  }
+  
+  .city-search-input {
+    font-size: 14px;
+    padding: 12px 35px 12px 35px;
+    min-height: 45px;
+  }
+  
+  .city-icon {
+    font-size: 16px;
+    left: 12px;
+  }
+  
+  .city-input::after {
+    right: 12px;
+    font-size: 10px;
+  }
+  
+  .date-input {
+    min-height: 45px;
+  }
+  
+  .date-content {
+    padding: 12px;
+    padding-left: 35px;
+  }
+  
+  .date-icon {
+    font-size: 16px;
+    left: 12px;
+  }
+  
+  .date-display {
+    font-size: 14px;
+  }
+  
+  .fare-options {
+    gap: 8px;
+  }
+  
+  .fare-option {
+    padding: 5px 12px;
+    font-size: 12px;
+  }
+  
+  .special-offer {
+    padding: 12px;
+  }
+  
+  .search-flights-btn {
+    padding: 12px;
+    font-size: 14px;
+  }
+  
+  .calendar-popup {
+    min-width: 260px;
+    padding: 12px;
+  }
+  
+  .calendar-day {
+    min-height: 35px;
+    font-size: 13px;
+  }
+  
+  .calendar-day .price {
+    font-size: 9px;
+  }
+  
+  .popular-destinations {
+    padding: 40px 0;
+  }
+  
+  .popular-destinations h2 {
+    font-size: 24px;
+    margin-bottom: 24px;
+  }
+  
+  .destination-image {
+    height: 140px;
+    font-size: 40px;
+  }
+  
+  .destination-info {
+    padding: 15px;
+  }
+  
+  .destination-info h3 {
+    font-size: 18px;
+  }
+  
+  .destination-info p {
+    font-size: 13px;
+  }
+  
+  .features-section {
+    padding: 40px 0;
+  }
+  
+  .feature-card {
+    padding: 25px 10px;
+  }
+  
+  .feature-icon {
+    font-size: 35px;
+    margin-bottom: 15px;
+  }
+  
+  .feature-card h3 {
+    font-size: 18px;
+    margin-bottom: 12px;
+  }
+  
+  .feature-card p {
+    font-size: 13px;
+  }
+  
+  .offers-section {
+    gap: 16px;
+  }
+  
+  .main-offer {
+    padding: 20px;
+  }
+  
+  .offer-content h3 {
+    font-size: 24px;
+  }
+  
+  .more-offers {
+    padding: 20px;
+  }
+  
+  .popular-destinations-sidebar {
+    padding: 20px;
   }
 }

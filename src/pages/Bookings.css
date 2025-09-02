@@ -548,6 +548,42 @@
   .header-row {
     grid-template-columns: repeat(3, 35px) 35px repeat(3, 35px);
   }
+  
+  .flight-info-header {
+    padding: 30px 40px;
+  }
+  
+  .seat-selection-section {
+    padding: 40px;
+  }
+}
+
+@media (max-width: 992px) {
+  .navbar-container {
+    padding: 0 15px;
+  }
+  
+  .navbar-menu {
+    gap: 5px;
+  }
+  
+  .navbar-item {
+    padding: 8px 15px;
+    font-size: 14px;
+  }
+  
+  .flight-info-header {
+    padding: 25px 30px;
+  }
+  
+  .seat-selection-section {
+    padding: 30px;
+  }
+  
+  .aircraft-container {
+    max-width: 500px;
+    padding: 20px;
+  }
 }
 
 @media (max-width: 768px) {
@@ -555,50 +591,236 @@
     display: none;
   }
   
+  .navbar-container {
+    height: 60px;
+  }
+  
+  .logo-text {
+    font-size: 20px;
+  }
+  
+  .booking-content {
+    padding: 20px 10px;
+  }
+  
   .booking-container {
-    margin: 10px;
-    border-radius: 10px;
+    margin: 0;
+    border-radius: 15px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
   }
   
   .flight-info-header {
     flex-direction: column;
-    gap: 15px;
+    gap: 20px;
     text-align: center;
+    padding: 30px 20px;
+  }
+  
+  .flight-route h2 {
+    font-size: 24px;
+    margin-bottom: 10px;
+  }
+  
+  .flight-details {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 15px;
+    font-size: 14px;
+  }
+  
+  .passenger-info {
+    font-size: 18px;
+  }
+  
+  .seat-selection-section {
+    padding: 30px 20px;
+  }
+  
+  .seat-selection-section h3 {
+    font-size: 22px;
+    text-align: center;
+    margin-bottom: 25px;
   }
   
   .seat-selection-info {
     flex-direction: column;
-    gap: 15px;
+    gap: 20px;
     align-items: stretch;
+    padding: 20px;
+    margin-bottom: 30px;
+  }
+  
+  .seat-selection-info p {
+    text-align: center;
+    font-size: 16px;
   }
   
   .seat-legend {
     justify-content: center;
+    flex-wrap: wrap;
+    gap: 15px;
+  }
+  
+  .legend-item {
+    font-size: 13px;
   }
   
   .aircraft-container {
+    padding: 20px 15px;
+    max-width: 100%;
+    margin: 0;
+  }
+  
+  .seat-map {
     padding: 15px;
   }
   
   .seat {
-    width: 30px;
-    height: 30px;
+    width: 32px;
+    height: 32px;
     font-size: 10px;
+    border-radius: 8px;
   }
   
   .seats {
-    grid-template-columns: repeat(3, 30px) 30px repeat(3, 30px);
+    grid-template-columns: repeat(3, 32px) 25px repeat(3, 32px);
+    gap: 4px;
   }
   
   .header-row {
-    grid-template-columns: repeat(3, 30px) 30px repeat(3, 30px);
+    grid-template-columns: repeat(3, 32px) 25px repeat(3, 32px);
+    gap: 4px;
+    font-size: 12px;
+  }
+  
+  .aisle-gap {
+    width: 25px;
+    height: 32px;
+  }
+  
+  .row-number {
+    width: 25px;
+    font-size: 12px;
+  }
+  
+  .seat-rows {
+    max-height: 350px;
+  }
+  
+  .booking-summary {
+    padding: 30px 20px;
+  }
+  
+  .summary-header h3 {
+    font-size: 20px;
+    text-align: center;
+  }
+  
+  .summary-details {
+    padding: 20px;
+  }
+  
+  .summary-row {
+    padding: 10px 0;
+    font-size: 14px;
+  }
+  
+  .summary-row.total {
+    font-size: 16px;
   }
   
   .booking-actions {
     flex-direction: column;
+    gap: 15px;
   }
   
   .back-btn, .confirm-btn {
     width: 100%;
+    padding: 12px 25px;
+    font-size: 15px;
+  }
+}
+
+@media (max-width: 480px) {
+  .booking-content {
+    padding: 15px 5px;
+  }
+  
+  .flight-info-header {
+    padding: 25px 15px;
+  }
+  
+  .flight-route h2 {
+    font-size: 20px;
+  }
+  
+  .flight-details {
+    font-size: 13px;
+    gap: 10px;
+  }
+  
+  .passenger-info {
+    font-size: 16px;
+  }
+  
+  .seat-selection-section {
+    padding: 25px 15px;
+  }
+  
+  .seat-selection-section h3 {
+    font-size: 20px;
+  }
+  
+  .aircraft-container {
+    padding: 15px 10px;
+  }
+  
+  .seat {
+    width: 28px;
+    height: 28px;
+    font-size: 9px;
+    border-radius: 6px;
+  }
+  
+  .seats {
+    grid-template-columns: repeat(3, 28px) 20px repeat(3, 28px);
+    gap: 3px;
+  }
+  
+  .header-row {
+    grid-template-columns: repeat(3, 28px) 20px repeat(3, 28px);
+    gap: 3px;
+    font-size: 11px;
+  }
+  
+  .aisle-gap {
+    width: 20px;
+    height: 28px;
+  }
+  
+  .row-number {
+    width: 20px;
+    font-size: 11px;
+  }
+  
+  .seat-legend {
+    gap: 10px;
+  }
+  
+  .legend-item {
+    font-size: 12px;
+  }
+  
+  .booking-summary {
+    padding: 25px 15px;
+  }
+  
+  .summary-details {
+    padding: 15px;
+  }
+  
+  .back-btn, .confirm-btn {
+    padding: 10px 20px;
+    font-size: 14px;
   }
 }

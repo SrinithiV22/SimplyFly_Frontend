@@ -1708,26 +1708,215 @@
   }
 }
 
+/* Enhanced Mobile Responsiveness - Clean Layout */
+@media (max-width: 1024px) {
+  .flightowner-dashboard {
+    padding: 10px;
+  }
+  
+  .content-area {
+    padding: 15px;
+    max-width: 100%;
+  }
+  
+  .section {
+    padding: 20px;
+    margin-bottom: 20px;
+  }
+  
+  .section-header h3 {
+    font-size: 1.3rem;
+  }
+  
+  .data-table {
+    border-radius: 10px;
+    overflow: hidden;
+  }
+}
+
 @media (max-width: 768px) {
+  .flightowner-dashboard {
+    padding: 5px;
+    background: #f8f9fa;
+  }
+  
+  .content-area {
+    padding: 8px;
+    max-width: 100%;
+  }
+  
+  .section {
+    padding: 16px;
+    margin-bottom: 16px;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    background: white;
+  }
+  
   .section-header {
     flex-direction: column;
-    gap: 15px;
+    gap: 12px;
     align-items: stretch;
+    margin-bottom: 16px;
+  }
+  
+  .section-header h3 {
+    font-size: 1.2rem;
+    text-align: center;
+    color: #2c3e50;
+    margin: 0;
   }
   
   .section-actions {
-    justify-content: center;
+    flex-direction: column;
+    gap: 8px;
+  }
+  
+  .add-btn, .refresh-btn {
+    width: 100%;
+    padding: 14px 16px;
+    font-size: 15px;
+    border-radius: 8px;
+    font-weight: 600;
+  }
+  
+  .search-input {
+    width: 100%;
+    padding: 14px 16px;
+    font-size: 16px;
+    border-radius: 8px;
+    border: 2px solid #e1e5e9;
+  }
+  
+  .search-input:focus {
+    border-color: #3498db;
+    outline: none;
+  }
+  
+  .data-table {
+    overflow-x: auto;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  }
+  
+  .data-table table {
+    min-width: 600px;
+    font-size: 13px;
+  }
+  
+  .data-table th {
+    padding: 12px 8px;
+    font-size: 12px;
+    font-weight: 600;
+    background: #f8f9fa;
+    color: #2c3e50;
+  }
+  
+  .data-table td {
+    padding: 12px 8px;
+    font-size: 12px;
+    border-bottom: 1px solid #f1f3f4;
+  }
+  
+  .time-display {
+    font-size: 11px;
+    padding: 4px 8px;
+    background: #e3f2fd;
+    color: #1976d2;
+    border-radius: 6px;
+    font-weight: 600;
+  }
+  
+  .date-display {
+    font-size: 10px;
+    color: #666;
+    margin-top: 2px;
+  }
+  
+  .departure-time, .arrival-time {
+    min-width: 85px;
+    text-align: center;
+  }
+  
+  .data-table .action-buttons {
+    flex-direction: column;
+    gap: 4px;
+    min-width: 80px;
+  }
+  
+  .data-table .action-buttons button {
+    font-size: 10px;
+    padding: 6px 8px;
+    width: 100%;
+    border-radius: 4px;
+    font-weight: 600;
+  }
+  
+  .edit-btn {
+    background: #f39c12;
+    color: white;
+    border: none;
+  }
+  
+  .delete-btn {
+    background: #e74c3c;
+    color: white;
+    border: none;
+  }
+  
+  .edit-btn:hover {
+    background: #e67e22;
+  }
+  
+  .delete-btn:hover {
+    background: #c0392b;
+  }
+}
+
+@media (max-width: 480px) {
+  .flightowner-dashboard {
+    padding: 2px;
+  }
+  
+  .content-area {
+    padding: 6px;
+  }
+  
+  .section {
+    padding: 12px;
+    margin-bottom: 12px;
+    border-radius: 10px;
+  }
+  
+  .section-header h3 {
+    font-size: 1.1rem;
+  }
+  
+  .add-btn, .refresh-btn {
+    padding: 16px;
+    font-size: 16px;
+    border-radius: 10px;
+  }
+  
+  .search-input {
+    padding: 16px;
+    font-size: 16px;
+    border-radius: 10px;
+  }
+  
+  .data-table table {
+    min-width: 500px;
   }
   
   .data-table th,
   .data-table td {
-    padding: 8px 4px;
-    font-size: 10px;
+    padding: 10px 6px;
+    font-size: 11px;
   }
   
   .time-display {
     font-size: 10px;
-    padding: 2px 4px;
+    padding: 3px 6px;
   }
   
   .date-display {
@@ -1735,16 +1924,15 @@
   }
   
   .departure-time, .arrival-time {
-    min-width: 60px;
+    min-width: 75px;
   }
   
   .data-table .action-buttons {
-    flex-direction: column;
-    gap: 4px;
+    min-width: 70px;
   }
   
   .data-table .action-buttons button {
-    font-size: 10px;
-    padding: 4px 8px;
+    font-size: 9px;
+    padding: 5px 6px;
   }
 }

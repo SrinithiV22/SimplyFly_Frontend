@@ -468,25 +468,61 @@
 }
 
 /* Responsive Design */
+@media (max-width: 1024px) {
+  .navbar-container {
+    padding: 0 15px;
+  }
+  
+  .admin-content {
+    padding: 25px;
+  }
+  
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
 @media (max-width: 768px) {
+  .navbar-container {
+    flex-direction: column;
+    height: auto;
+    padding: 15px;
+    gap: 15px;
+  }
+  
+  .navbar-logo {
+    align-self: flex-start;
+  }
+  
+  .navbar-auth {
+    align-self: flex-end;
+  }
+  
   .admin-container {
     flex-direction: column;
   }
 
   .admin-sidebar {
     width: 100%;
-    padding: 10px 0;
+    padding: 15px 0;
+    border-right: none;
+    border-bottom: 1px solid #e9ecef;
   }
 
   .sidebar-menu {
     flex-direction: row;
     overflow-x: auto;
+    padding: 0 10px;
+    gap: 10px;
   }
 
   .sidebar-item {
     white-space: nowrap;
     border-right: none;
     border-bottom: 3px solid transparent;
+    min-width: 120px;
+    text-align: center;
+    padding: 12px 15px;
   }
 
   .sidebar-item.active {
@@ -495,7 +531,7 @@
   }
 
   .admin-content {
-    padding: 20px;
+    padding: 20px 15px;
   }
 
   .section-header {
@@ -503,26 +539,111 @@
     gap: 15px;
     align-items: stretch;
   }
+  
+  .section-header h1 {
+    font-size: 24px;
+  }
 
   .section-actions {
-    justify-content: space-between;
+    flex-direction: column;
+    gap: 10px;
   }
 
   .search-input {
     width: 100%;
-    max-width: 200px;
+    max-width: none;
   }
 
   .stats-grid {
     grid-template-columns: 1fr;
+    gap: 15px;
+  }
+  
+  .stat-card {
+    padding: 20px;
+    flex-direction: column;
+    text-align: center;
+    gap: 15px;
+  }
+  
+  .stat-icon {
+    width: 60px;
+    height: 60px;
+    font-size: 30px;
   }
 
   .data-table {
     overflow-x: auto;
+    border-radius: 8px;
   }
 
   .data-table table {
-    min-width: 600px;
+    min-width: 700px;
+  }
+  
+  .data-table th,
+  .data-table td {
+    padding: 12px 8px;
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .admin-navbar {
+    padding: 0 10px;
+  }
+  
+  .navbar-container {
+    padding: 10px;
+  }
+  
+  .logo-text {
+    font-size: 18px;
+  }
+  
+  .admin-content {
+    padding: 15px 10px;
+  }
+  
+  .section-header h1 {
+    font-size: 20px;
+  }
+  
+  .sidebar-item {
+    min-width: 100px;
+    padding: 10px 12px;
+    font-size: 14px;
+  }
+  
+  .stat-card {
+    padding: 15px;
+  }
+  
+  .stat-icon {
+    width: 50px;
+    height: 50px;
+    font-size: 24px;
+  }
+  
+  .stat-info h3 {
+    font-size: 24px;
+  }
+  
+  .add-btn, .refresh-btn {
+    width: 100%;
+    padding: 12px;
+    font-size: 16px;
+  }
+  
+  .data-table th,
+  .data-table td {
+    padding: 10px 6px;
+    font-size: 13px;
+  }
+  
+  .role-badge, .status-badge {
+    font-size: 10px;
+    padding: 3px 8px;
   }
 }
 

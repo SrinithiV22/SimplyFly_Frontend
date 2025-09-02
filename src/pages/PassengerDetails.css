@@ -247,7 +247,25 @@
   color: white;
 }
 
-/* Responsive Design */
+/* Enhanced Responsive Design */
+@media (max-width: 1024px) {
+  .passenger-content {
+    padding: 1.5rem;
+  }
+  
+  .booking-summary {
+    padding: 1.5rem;
+  }
+  
+  .passenger-details-section {
+    padding: 1.5rem;
+  }
+  
+  .summary-details {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
 @media (max-width: 768px) {
   .header-content {
     flex-direction: column;
@@ -258,49 +276,153 @@
   .nav-menu {
     flex-wrap: wrap;
     justify-content: center;
+    gap: 0.5rem;
+  }
+  
+  .nav-link {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.9rem;
   }
 
   .passenger-content {
     padding: 1rem;
+  }
+  
+  .booking-summary {
+    padding: 1.2rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .booking-summary h2 {
+    font-size: 1.6rem;
+  }
+  
+  .passenger-details-section {
+    padding: 1.2rem;
+  }
+  
+  .passenger-details-section h3 {
+    font-size: 1.4rem;
   }
 
   .form-row {
     grid-template-columns: 1fr;
     gap: 1rem;
   }
+  
+  .passenger-form {
+    padding: 1.2rem;
+  }
+  
+  .passenger-form h4 {
+    font-size: 1.1rem;
+  }
 
   .form-actions {
     flex-direction: column;
+    gap: 0.8rem;
   }
 
   .btn-primary,
   .btn-secondary {
     width: 100%;
+    padding: 0.8rem 1.5rem;
   }
 
   .summary-details {
     grid-template-columns: 1fr;
+    gap: 0.8rem;
+  }
+  
+  .summary-details p {
+    padding: 0.6rem;
+    font-size: 0.9rem;
   }
 }
 
 @media (max-width: 480px) {
+  .header-content {
+    padding: 0 0.8rem;
+  }
+  
   .logo {
-    font-size: 1.5rem;
+    font-size: 1.4rem;
+  }
+  
+  .nav-menu {
+    gap: 0.3rem;
+  }
+  
+  .nav-link {
+    padding: 0.3rem 0.6rem;
+    font-size: 0.8rem;
+  }
+
+  .passenger-content {
+    padding: 0.8rem;
+  }
+  
+  .booking-summary {
+    padding: 1rem;
+    border-radius: 12px;
   }
 
   .booking-summary h2 {
-    font-size: 1.5rem;
+    font-size: 1.4rem;
+  }
+  
+  .passenger-details-section {
+    padding: 1rem;
+    border-radius: 12px;
   }
 
   .passenger-details-section h3 {
-    font-size: 1.3rem;
+    font-size: 1.2rem;
+  }
+  
+  .instruction {
+    font-size: 0.9rem;
+    margin-bottom: 1.5rem;
   }
 
   .passenger-form {
-    padding: 1rem;
+    padding: 0.8rem;
+    border-radius: 10px;
   }
 
   .passenger-form h4 {
-    font-size: 1.1rem;
+    font-size: 1rem;
+  }
+  
+  .form-group label {
+    font-size: 0.8rem;
+  }
+  
+  .form-group input,
+  .form-group select {
+    padding: 0.6rem;
+    font-size: 0.9rem;
+  }
+  
+  .form-actions {
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+  }
+  
+  .btn-primary,
+  .btn-secondary {
+    padding: 0.7rem 1.2rem;
+    font-size: 0.9rem;
+    min-width: auto;
+  }
+  
+  .summary-details p {
+    padding: 0.5rem;
+    font-size: 0.8rem;
+  }
+  
+  .error-message {
+    padding: 0.8rem;
+    font-size: 0.9rem;
   }
 }

@@ -22,6 +22,7 @@ function Home() {
   const [showPassengerDropdown, setShowPassengerDropdown] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
   const [isFlightOwner, setIsFlightOwner] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   
   // Calendar states
   const [showDepartCalendar, setShowDepartCalendar] = useState(false);
@@ -354,7 +355,13 @@ function Home() {
             <span className="logo-subtitle">Fly Like A Bird</span>
           </div>
 
-          <div className="navbar-menu">
+          <div className="mobile-menu-toggle" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+
+          <div className={`navbar-menu ${mobileMenuOpen ? 'mobile-open' : ''}`}>
             <a href="#" className="navbar-item">
               <span className="navbar-icon">🎯</span>
               Home

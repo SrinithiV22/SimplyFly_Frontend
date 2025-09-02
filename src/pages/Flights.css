@@ -561,15 +561,30 @@
 
 /* Responsive Design */
 @media (max-width: 1024px) {
+  .navbar-container {
+    padding: 16px 15px;
+  }
+  
+  .flights-content {
+    padding: 20px 15px;
+  }
+  
   .filters-section {
     flex-direction: column;
     gap: 16px;
     align-items: stretch;
+    padding: 20px;
   }
   
   .filters-left,
   .filters-right {
     justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  
+  .flight-card {
+    padding: 20px;
   }
 }
 
@@ -578,20 +593,89 @@
     display: none;
   }
   
+  .navbar-container {
+    height: 60px;
+    padding: 0 15px;
+  }
+  
+  .logo-text {
+    font-size: 18px;
+  }
+  
   .flights-content {
-    padding: 16px;
+    padding: 15px 10px;
   }
   
   .search-summary {
     flex-direction: column;
-    gap: 16px;
+    gap: 15px;
     align-items: stretch;
+    padding: 20px 15px;
+  }
+  
+  .route-cities {
+    justify-content: center;
+    gap: 12px;
+  }
+  
+  .from-city,
+  .to-city {
+    font-size: 22px;
+  }
+  
+  .travel-details {
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 15px;
+  }
+  
+  .filters-section {
+    padding: 15px;
+    gap: 12px;
+  }
+  
+  .filters-left,
+  .filters-right {
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .sort-dropdown,
+  .filter-btn {
+    width: 100%;
+    text-align: center;
+  }
+  
+  .flight-card {
+    padding: 15px;
+    margin-bottom: 15px;
+  }
+  
+  .flight-header {
+    flex-direction: column;
+    gap: 15px;
+    align-items: stretch;
+  }
+  
+  .flight-info {
+    text-align: center;
+  }
+  
+  .flight-price {
+    text-align: center;
+    padding: 15px 0;
+    border-top: 1px solid #f0f0f0;
+  }
+  
+  .price-amount {
+    font-size: 24px;
   }
   
   .flight-route {
     grid-template-columns: 1fr;
-    gap: 16px;
+    gap: 20px;
     text-align: center;
+    margin: 20px 0;
   }
   
   .departure-info,
@@ -599,18 +683,52 @@
     text-align: center;
   }
   
+  .route-arrow {
+    transform: rotate(90deg);
+    margin: 10px 0;
+  }
+  
   .flight-footer {
     flex-direction: column;
-    gap: 16px;
+    gap: 15px;
     align-items: stretch;
   }
   
+  .flight-details {
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 15px;
+  }
+  
   .flight-actions {
-    justify-content: space-between;
+    justify-content: center;
+  }
+  
+  .book-now-btn {
+    width: 100%;
+    padding: 12px 25px;
+    font-size: 16px;
+  }
+  
+  .no-flights {
+    padding: 40px 15px;
+  }
+  
+  .no-flights-icon {
+    font-size: 40px;
   }
 }
 
 @media (max-width: 480px) {
+  .flights-content {
+    padding: 10px 5px;
+  }
+  
+  .search-summary {
+    padding: 15px 10px;
+    border-radius: 8px;
+  }
+  
   .route-cities {
     flex-direction: column;
     gap: 8px;
@@ -618,21 +736,91 @@
   
   .from-city,
   .to-city {
-    font-size: 20px;
+    font-size: 18px;
   }
   
   .travel-details {
     flex-wrap: wrap;
     justify-content: center;
+    gap: 10px;
+  }
+  
+  .travel-details span {
+    font-size: 12px;
+  }
+  
+  .filters-section {
+    padding: 12px;
+  }
+  
+  .flight-card {
+    padding: 12px;
+    border-radius: 8px;
   }
   
   .flight-header {
-    flex-direction: column;
-    gap: 16px;
-    align-items: stretch;
+    gap: 12px;
   }
   
-  .flight-price {
-    text-align: center;
+  .airline-name {
+    font-size: 14px;
+  }
+  
+  .flight-number {
+    font-size: 12px;
+  }
+  
+  .price-amount {
+    font-size: 20px;
+  }
+  
+  .price-per-person {
+    font-size: 11px;
+  }
+  
+  .departure-info,
+  .arrival-info {
+    padding: 10px;
+  }
+  
+  .time {
+    font-size: 18px;
+  }
+  
+  .city {
+    font-size: 12px;
+  }
+  
+  .airport {
+    font-size: 11px;
+  }
+  
+  .flight-details {
+    gap: 10px;
+  }
+  
+  .flight-details span {
+    font-size: 11px;
+  }
+  
+  .book-now-btn {
+    padding: 10px 20px;
+    font-size: 14px;
+  }
+  
+  .no-flights {
+    padding: 30px 10px;
+  }
+  
+  .no-flights-icon {
+    font-size: 35px;
+  }
+  
+  .no-flights h3 {
+    font-size: 18px;
+  }
+  
+  .no-flights p {
+    font-size: 14px;
   }
 }

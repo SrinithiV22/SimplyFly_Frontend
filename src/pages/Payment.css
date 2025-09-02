@@ -255,6 +255,21 @@
   color: #666;
 }
 
+/* Enhanced Responsive Design */
+@media (max-width: 1024px) {
+  .payment-content {
+    padding: 25px;
+  }
+  
+  .payment-content h2 {
+    font-size: 24px;
+  }
+  
+  .passenger-details {
+    grid-template-columns: 1fr;
+  }
+}
+
 @media (max-width: 768px) {
   .payment-container {
     padding: 10px;
@@ -262,25 +277,211 @@
   
   .payment-content {
     padding: 20px;
+    border-radius: 12px;
+  }
+  
+  .payment-content h2 {
+    font-size: 22px;
+    margin-bottom: 25px;
+  }
+  
+  .booking-summary, .passenger-summary, .payment-methods {
+    padding: 15px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+  }
+  
+  .booking-summary h3, .passenger-summary h3, .payment-methods h3 {
+    font-size: 18px;
+    margin-bottom: 12px;
+  }
+  
+  .summary-row {
+    padding: 6px 0;
+  }
+  
+  .summary-row.total {
+    font-size: 16px;
+    padding-top: 12px;
+  }
+  
+  .passenger-info {
+    padding: 12px;
+    margin-bottom: 12px;
+  }
+  
+  .passenger-header {
+    font-size: 14px;
+  }
+  
+  .passenger-details {
+    grid-template-columns: 1fr;
+    gap: 6px;
+    font-size: 13px;
   }
   
   .payment-options {
     flex-direction: column;
+    gap: 12px;
+    margin-bottom: 20px;
   }
   
   .payment-option {
     min-width: auto;
+    padding: 10px 15px;
+  }
+  
+  .card-details, .upi-details {
+    padding: 15px;
+  }
+  
+  .form-group {
+    margin-bottom: 15px;
+  }
+  
+  .form-group input {
+    padding: 10px 12px;
+    font-size: 14px;
   }
   
   .form-row {
     grid-template-columns: 1fr;
+    gap: 12px;
   }
   
   .payment-actions {
     flex-direction: column;
+    gap: 12px;
+    margin-top: 25px;
+  }
+  
+  .btn-secondary, .btn-primary {
+    padding: 12px 25px;
+    font-size: 14px;
+    width: 100%;
   }
   
   .btn-primary {
     max-width: none;
+  }
+  
+  .payment-btn {
+    font-size: 16px;
+    padding: 15px 30px;
+  }
+}
+
+@media (max-width: 480px) {
+  .payment-container {
+    padding: 8px;
+  }
+  
+  .payment-content {
+    padding: 15px;
+    border-radius: 10px;
+  }
+  
+  .payment-content h2 {
+    font-size: 20px;
+    margin-bottom: 20px;
+  }
+  
+  .booking-summary, .passenger-summary, .payment-methods {
+    padding: 12px;
+    margin-bottom: 15px;
+  }
+  
+  .booking-summary h3, .passenger-summary h3, .payment-methods h3 {
+    font-size: 16px;
+    margin-bottom: 10px;
+    padding-bottom: 8px;
+  }
+  
+  .summary-row {
+    padding: 5px 0;
+    font-size: 14px;
+  }
+  
+  .summary-row.total {
+    font-size: 15px;
+    padding-top: 10px;
+  }
+  
+  .passenger-info {
+    padding: 10px;
+    margin-bottom: 10px;
+  }
+  
+  .passenger-header {
+    font-size: 13px;
+    margin-bottom: 8px;
+  }
+  
+  .passenger-details {
+    font-size: 12px;
+    gap: 4px;
+  }
+  
+  .detail-row {
+    padding: 3px 0;
+  }
+  
+  .payment-options {
+    gap: 10px;
+    margin-bottom: 15px;
+  }
+  
+  .payment-option {
+    padding: 8px 12px;
+    font-size: 14px;
+  }
+  
+  .card-details, .upi-details {
+    padding: 12px;
+  }
+  
+  .form-group {
+    margin-bottom: 12px;
+  }
+  
+  .form-group label {
+    font-size: 14px;
+    margin-bottom: 6px;
+  }
+  
+  .form-group input {
+    padding: 8px 10px;
+    font-size: 13px;
+  }
+  
+  .form-row {
+    gap: 10px;
+  }
+  
+  .error-message {
+    padding: 12px;
+    font-size: 14px;
+    margin-bottom: 15px;
+  }
+  
+  .payment-actions {
+    gap: 10px;
+    margin-top: 20px;
+  }
+  
+  .btn-secondary, .btn-primary {
+    padding: 10px 20px;
+    font-size: 13px;
+    min-width: auto;
+  }
+  
+  .payment-btn {
+    font-size: 14px;
+    padding: 12px 25px;
+  }
+  
+  .loading {
+    padding: 30px;
+    font-size: 16px;
   }
 }
